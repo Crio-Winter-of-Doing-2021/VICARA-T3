@@ -1,0 +1,15 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "npm package file for backend of 'vicara storage drive for enterprise' project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Arijit Roy & Paranjaya Saxena",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "node": "^15.8.0"
+  }
+}
