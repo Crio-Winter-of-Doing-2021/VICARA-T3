@@ -3,6 +3,10 @@ require('./db/mongoose')
 const userRouter = require('./routers/user')
 const fileRouter = require('./routers/file_management')
 const app = express();
+
+var cors = require('cors');
+
+app.use(cors());
 const port = process.env.PORT;
 
 app.use(express.json());
