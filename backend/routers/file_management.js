@@ -5,18 +5,6 @@ const AWS = require('aws-sdk');
 const file_model = require('../models/file')
 const path = require('path')
 
-// Initiate collection
-file_model.countDocuments({}, (error, count) => {
-    if (error) console.log(error);
-
-    if (count == 0) {
-        const demo_obj = new file_model({ "take": false });
-        demo_obj.save((err, obj) => {
-            if (err) console.log(err);
-        });
-    }
-});
-
 // configure aws and create a s3 object
 AWS.config.update({
     accessKeyId: process.env.ACCESS_KEY_ID,
@@ -40,14 +28,9 @@ router.get('/upload', (req, res) => {
             console.log("upload error : ", err);
         } else {
             // insert file details in db
-            file_model.countDocuments({ "take": true }, (error, count) => {
                 const file_obj = {
-                    "file_id": (count + 1).toString(),
                     "key": params.Key,
                     "bucket": params.Bucket,
-                    "take": true,
-                    "email": process.env.EMAIL,
-                    "password": process.env.PASSWORD,
                     "isFav": false,
                     "file_name": path.basename(filepath)
                 };
@@ -59,7 +42,6 @@ router.get('/upload', (req, res) => {
                 model_obj.save((err, obj) => {
                     if (err) console.log(err);
                 });
-            });
         }
     });
 
@@ -68,7 +50,7 @@ router.get('/upload', (req, res) => {
 
 // download a file
 router.get('/download/:file_id', (req, res) => {
-    file_model.find({ "file_id": req.params.file_id, "take": true }, (err, file_detail) => {
+    file_model.find({ "file_id": req.params.file_id }, (err, file_detail) => {
         const params = {
             Bucket: file_detail[0].bucket,
             Key: file_detail[0].key
@@ -103,7 +85,7 @@ router.delete('/files/:file_id', async (req, res) => {
 
 // view files
 router.get('/files', (req, res) => {
-    file_model.find({ "take": true }, (ERR, file_list) => {
+    file_model.find({/* no condition */}, (ERR, file_list) => {
         res.send(file_list);
     });
 });
