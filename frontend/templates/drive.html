@@ -48,8 +48,15 @@
                             Upload
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Upload file</a></li>
+                            <form hidden method="POST" target="_blank" action="http://localhost:3000/upload"
+                                encType="multipart/form-data">
+                                <input name="uploaded_file_list" type="file" id="choose-file" multiple>
+                                <input type="submit" value="upload!" id="submit-btn">
+                            </form>
+
+                            <li><a class="dropdown-item" id="upload-file" href="#">Upload file</a></li>
                             <li><a class="dropdown-item" href="#">Upload folder</a></li>
+                            <script src="../static/js/file_upload.js"></script>
                         </ul>
                     </li>
                 </ul>
@@ -63,7 +70,7 @@
     </nav>
 
     <!-- Display list of files -->
-    <script src="../public/js/files_list.js"></script>
+    <script src="../static/js/files_list.js"></script>
     <script>getFileList()</script>
     <div id="files-list"></div>
 </body>

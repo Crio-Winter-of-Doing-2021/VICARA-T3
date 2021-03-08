@@ -4,6 +4,9 @@ const router = new express.Router();
 const AWS = require('aws-sdk');
 const file_model = require('../models/file')
 const path = require('path')
+const multer = require('multer')
+const multers3 = require('multer-s3')
+
 
 // configure aws and create a s3 object
 AWS.config.update({
@@ -14,38 +17,49 @@ AWS.config.update({
 const s3 = new AWS.S3();
 
 // upload a file
-router.get('/upload', (req, res) => {
-    const filepath = "/Users/arijitroy/Desktop/Screenshot 2021-02-26 at 9.30.44 PM.png";
-    const params = {
-        Bucket: process.env.BUCKET_NAME,
-        Key: Date.now() + "_" + path.basename(filepath),
-        Body: fs.createReadStream(filepath)
-    };
+router.post('/upload', function (req, res, next) {
+    const uploaded_list = req.files.uploaded_file_list;
+    let uploaded_file_list;
+    if (typeof(uploaded_list.length) === 'undefined') {
+        uploaded_file_list = [uploaded_list];
+    } else {
+        uploaded_file_list = uploaded_list;
+    }
 
-    // upload file
-    s3.putObject(params, (err, data) => {
-        if (err) {
-            console.log("upload error : ", err);
-        } else {
-            // insert file details in db
-                const file_obj = {
-                    "key": params.Key,
-                    "bucket": params.Bucket,
-                    "isFav": false,
-                    "file_name": path.basename(filepath)
-                };
+    for (let i = 0; i < uploaded_file_list.length; i++) {
+        let file = uploaded_file_list[i];
+        console.log(file)
+        const file_content = Buffer.from(file.data, 'binary');
+        const params = {
+            Bucket: process.env.BUCKET_NAME,
+            Key: file.name,
+            Body: file_content
+        };
 
-                //console.log(file_obj);
+        // insert file details in db
+        const file_obj = {
+            "key": params.Key,
+            "bucket": params.Bucket,
+            "isFav": false,
+            "file_name": file.name
+        };
 
-                const model_obj = new file_model(file_obj);
+        //console.log(file_obj);
 
-                model_obj.save((err, obj) => {
-                    if (err) console.log(err);
-                });
-        }
-    });
+        const model_obj = new file_model(file_obj);
 
-    res.send("Successfully uploaded");
+        model_obj.save((err, obj) => {
+            if (err) console.log(err);
+            console.log(obj);
+        });
+
+        s3.upload(params, (err, data)=>{
+            if (err) res.send("error");
+            console.log(data)
+        });
+    }
+
+    res.send('Successfully uploaded ' + "req.files.uploaded_file_list.length" + ' files!')
 });
 
 // download a file

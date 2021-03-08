@@ -2,7 +2,13 @@ const express = require('express')
 require('./db/mongoose')
 const userRouter = require('./routers/user')
 const fileRouter = require('./routers/file_management')
+const bodyParser = require('body-parser')
+const fileUpload = require('express-fileupload')
 const app = express();
+
+
+app.use(bodyParser.json());
+app.use(fileUpload());
 
 var cors = require('cors');
 

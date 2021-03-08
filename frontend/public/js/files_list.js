@@ -1,6 +1,6 @@
 async function getFileList() {
     const xhttp = new XMLHttpRequest();
-    const backend_url = "http://localhost:5000/files";
+    const backend_url = "http://localhost:3000/files";
     xhttp.open("GET", backend_url, true);
     xhttp.send();
 
