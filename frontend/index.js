@@ -1,20 +1,35 @@
-const express = require('express');
-const path = require('path');
+const path = require("path")
+const express = require("express")
+const hbs = require("hbs")
+const { dirname } = require("path")
 
-const app = express();
+const port = process.env.PORT;
 
-var cors = require('cors');
+const app = express()
+var cors = require('cors')
 
-app.use(cors());
+app.use(cors())
 
-app.use('/static', express.static('public'));
+const publicDirPath = path.join(__dirname, './public')
+const viewsPath = path.join(__dirname, './templates/views')
+const partialsPath = path.join(__dirname, "./templates/partials")
 
-app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, './templates/index.html'));
-});
+app.set("view engine", "hbs")
+app.set('views', viewsPath)
+hbs.registerPartials(partialsPath)
 
-app.get('/drive', function (req, res) {
-    res.sendFile(path.join(__dirname, './templates/drive.html'));
-});
+app.use(express.static(publicDirPath))
 
-app.listen(process.env.PORT);
+// Homepage
+app.get('/', (req, res) => {
+    res.render('index');
+})
+
+app.get('/drive', (req, res) => {
+    res.render('drive');
+})
+
+// Start server
+app.listen(port, () => {
+    console.log("Server is up on " + port)
+})
