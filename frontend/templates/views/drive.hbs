@@ -48,8 +48,8 @@
                             Upload
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <form hidden onsubmit="uploadFile()">
-                                <input name="uploaded_file_list" type="file" id="choose-file" multiple>
+                            <form hidden enctype="multipart/form-data" onsubmit="uploadFile()">
+                                <input name="uploaded_file_list" type="file" id="choose-file" multiple="multiple">
                                 <input type="submit" value="upload!" id="submit-btn">
                             </form>
 

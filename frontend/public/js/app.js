@@ -33,7 +33,7 @@ loginForm.addEventListener('submit', async (e) => {
         .then((json) => {
             sessionStorage.setItem('authToken', json.token)
             sessionStorage.setItem('authUser', JSON.stringify(json.user))
-            getFileList(json.token)
+            getFileList()
         })
         .catch(err => console.log(err))
 })
@@ -61,7 +61,9 @@ signupForm.addEventListener('submit', async (e) => {
         headers: { "Content-type": "application/json; charset=UTF-8" }
     }).then(response => response.json())
         .then(json => {
-            getFileList(json.token)
+            sessionStorage.setItem('authToken', json.token)
+            sessionStorage.setItem('authUser', JSON.stringify(json.user))
+            getFileList()
         })
         .catch(err => console.log(err))
 
@@ -70,11 +72,10 @@ signupForm.addEventListener('submit', async (e) => {
 //************************************************/
 
 
-async function getFileList(token) {
+async function getFileList() {
 
     const myHeaders = new Headers({
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
+        'Authorization': 'Bearer ' + sessionStorage.getItem('authToken'),
     })
 
     await fetch('http://localhost:3000/files', {
@@ -95,22 +96,22 @@ async function getFileList(token) {
 
 
 async function uploadFile() {
-    var file = document.getElementById('choose-file').value;
+    var file = document.getElementsByName('uploaded_file_list');
 
     const myHeaders = new Headers({
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/x-www-form-urlencoded',
         'Authorization': 'Bearer ' + sessionStorage.getItem('authToken'),
     })
 
-    const data = {
-        'file': file,
-        'owner': sessionStorage.getItem('authUser')._id,
-    }
+    var allFile = Object.entries(file[0].files)
+    console.log(allFile[0])
+    console.log(allFile[1])
+
 
     await fetch('http://localhost:3000/upload', {
         method: 'POST',
         headers: myHeaders,
-        body: JSON.stringify(data),
+        body: allFile,
     }).then(
         response => response.json()
     ).then(

@@ -16,79 +16,48 @@ const s3 = new AWS.S3();
 
 // upload a file
 router.post('/upload', auth, async (req, res, next) => {
-    // const uploaded_list = req.files.uploaded_file_list;
-    // let uploaded_file_list;
-    // if (typeof (uploaded_list.length) === 'undefined') {
-    //     uploaded_file_list = [uploaded_list];
-    // } else {
-    //     uploaded_file_list = uploaded_list;
-    // }
+    var uploaded_list = req.body.allFile
+    console.log(uploaded_list)
+    let uploaded_file_list;
+    if (typeof (uploaded_list.length) === 'undefined') {
+        uploaded_file_list = [uploaded_list];
+    } else {
+        uploaded_file_list = uploaded_list;
+    }
 
-    // for (let i = 0; i < uploaded_file_list.length; i++) {
-    //     let file = uploaded_file_list[i];
-    //     console.log(file)
-    //     const file_content = Buffer.from(file.data, 'binary');
-    //     const params = {
-    //         Bucket: process.env.BUCKET_NAME,
-    //         Key: file.name,
-    //         Body: file_content
-    //     };
+    for (let i = 0; i < uploaded_file_list.length; i++) {
+        let file = uploaded_file_list[i];
+        console.log(file)
+        const file_content = Buffer.from(file.data, 'binary');
+        const params = {
+            Bucket: process.env.BUCKET_NAME,
+            Key: file.name,
+            Body: file_content
+        };
 
-    //     // insert file details in db
-    //     const file_obj = {
-    //         "key": params.Key,
-    //         "bucket": params.Bucket,
-    //         "isFav": false,
-    //         "file_name": file.name,
-    //         "owner": req.user._id,
-    //     };
+        // insert file details in db
+        const file_obj = {
+            "key": params.Key,
+            "bucket": params.Bucket,
+            "isFav": false,
+            "file_name": file.name,
+            "owner": req.user._id,
+        };
 
-    //     //console.log(file_obj);
+        //console.log(file_obj);
 
-    //     const model_obj = new file_model(file_obj);
+        const model_obj = new file_model(file_obj);
 
-    //     await model_obj.save((err, obj) => {
-    //         if (err) console.log(err);
-    //         console.log(obj);
-    //     });
+        await model_obj.save((err, obj) => {
+            if (err) console.log(err);
+            console.log(obj);
+        });
 
-    //     s3.upload(params, (err, data) => {
-    //         if (err) res.send("error");
-    //         console.log(data)
-    //     });
-    // }
-
-    const file = req.body.file;
-    const userId = req.body._id;
-
-    const file_content = Buffer.from(file.data, 'binary');
-
-    const file_obj = {
-        "key": params.Key,
-        "bucket": params.Bucket,
-        "isFav": false,
-        "file_name": file.name,
-        "owner": userId,
-    };
-
-    const params = {
-        Bucket: process.env.BUCKET_NAME,
-        Key: file.name,
-        Body: file_content
-    };
-
-    const model_obj = new file_model(file_obj);
-
-    await model_obj.save((err, obj) => {
-        if (err) console.log(err);
-        console.log(obj);
-    });
-
-    s3.upload(params, (err, data) => {
-        if (err) res.send("error");
-        console.log(data)
-    });
-
+        s3.upload(params, (err, data) => {
+            if (err) res.send("error");
+            console.log(data)
+        });
+    }
 
     res.send('Successfully uploaded ' + "req.files.uploaded_file_list.length" + ' files!')
 });
