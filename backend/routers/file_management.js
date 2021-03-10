@@ -16,8 +16,7 @@ const s3 = new AWS.S3();
 
 // upload a file
 router.post('/upload', auth, async (req, res, next) => {
-    var uploaded_list = req.body.allFile
-    console.log(uploaded_list)
+    let uploaded_list = req.files.uploadFile;
     let uploaded_file_list;
     if (typeof (uploaded_list.length) === 'undefined') {
         uploaded_file_list = [uploaded_list];
@@ -48,7 +47,7 @@ router.post('/upload', auth, async (req, res, next) => {
 
         const model_obj = new file_model(file_obj);
 
-        await model_obj.save((err, obj) => {
+        model_obj.save((err, obj) => {
             if (err) console.log(err);
             console.log(obj);
         });

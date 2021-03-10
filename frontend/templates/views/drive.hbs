@@ -74,7 +74,11 @@
     <script>
         getFileList()
     </script> --}}
-    <div id="files-list"></div>
+    <div id="files-list">
+        <script>
+            document.getElementById("files-list").innerHTML = sessionStorage.file_list
+        </script>
+    </div>
 </body>
 
 </html>
