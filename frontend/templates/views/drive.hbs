@@ -15,8 +15,8 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
-                <img src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="30" height="24"
-                    class="d-inline-block align-top">
+                {{!-- <img src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="30" height="24"
+                    class="d-inline-block align-top"> --}}
                 Enterprise Storage
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -49,7 +49,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <form hidden enctype="multipart/form-data" onsubmit="uploadFile()">
-                                <input name="uploaded_file_list" type="file" id="choose-file" multiple="multiple">
+                                <input name="uploaded_file_list" type="file" id="choose-file" multiple>
                                 <input type="submit" value="upload!" id="submit-btn">
                             </form>
 

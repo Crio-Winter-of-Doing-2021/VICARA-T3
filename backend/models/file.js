@@ -21,9 +21,19 @@ let file_schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'User'
-    }
+    },
+    updatedAt: {
+        type: Date,
+        default: Date.now
+    },
 }, {
     timestamps: true
+});
+
+file_schema.pre('save', function preSave(next) {
+    var file = this;
+    file.updatedAt = Date.now;
+    next();
 });
 
 let file_model = mongoose.model('file_details', file_schema);

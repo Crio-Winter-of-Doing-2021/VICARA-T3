@@ -111,23 +111,16 @@ async function uploadFile() {
         'Authorization': 'Bearer ' + sessionStorage.getItem('authToken'),
     })
 
-    for (var i = 0; i < file.files.length; i++) {
-        console.log('hello')
+    for await (let newFile of file.files) {
+        console.log(newFile)
         var allFile = new FormData();
-        allFile.append('uploadFile', file.files[i])
+        allFile.append('uploadFile', newFile)
 
 
-        await fetch('http://localhost:3000/upload', {
+        fetch('http://localhost:3000/upload', {
             method: 'POST',
             headers: myHeaders,
             body: allFile,
-        }).then(
-            response => response.json()
-        ).then(
-            success => console.log(success)
-        ).catch(
-            error => console.log(error)
-        );
+        })
     }
 }
-
