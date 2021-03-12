@@ -124,3 +124,29 @@ async function uploadFile() {
         })
     }
 }
+
+//******************************************************/
+
+//************************************************/
+
+
+async function getRecentFileList() {
+
+    const myHeaders = new Headers({
+        'Authorization': 'Bearer ' + sessionStorage.getItem('authToken'),
+    })
+
+    await fetch('http://localhost:3000/files', {
+        method: "GET",
+        headers: myHeaders,
+    }).then(response => response.json())
+        .then(json => {
+            var list = JSON.parse(JSON.stringify(json))
+            var fileList = Object.keys(list).map((key) => [Number(key), list[key]]);
+            fileList.sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : -1))
+            console.log(fileList)
+            sessionStorage.setItem('file_list', JSON.stringify(fileList));
+            window.location.href = "/drive";
+        })
+        .catch(err => console.log(err))
+}
