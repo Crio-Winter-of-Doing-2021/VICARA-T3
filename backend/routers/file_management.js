@@ -50,7 +50,7 @@ router.post('/upload', auth, async (req, res, next) => {
 });
 
 // Mark a file Favourite
-router.patch('/fav/:id', (req, res) => {
+router.patch('/fav/:id&:fav', (req, res) => {
     var updated_object = {};
     var id = req.params.file_id;
     var current_status = req.params.fav;
