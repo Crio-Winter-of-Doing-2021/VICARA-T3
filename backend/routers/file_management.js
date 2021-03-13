@@ -49,6 +49,20 @@ router.post('/upload', auth, async (req, res, next) => {
 
 });
 
+// Mark a file Favourite
+router.patch('/fav/:id', (req, res) => {
+    var updated_object = {};
+    var id = req.params.file_id;
+    var current_status = req.params.fav;
+    var status = false;
+    if (current_status == "false") {
+        status = true;
+    }
+
+    file_model.updateOne({ "file_id": id }, { "isFav": status });
+    res.status(200).send("updated");
+});
+
 // download a file
 router.get('/download/:file_id', auth, async (req, res) => {
     await file_model.find({ "file_id": req.params.file_id, "owner": req.user._id }, (err, file_detail) => {
