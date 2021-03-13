@@ -38,6 +38,7 @@ if (loginForm) {
             .then((json) => {
                 sessionStorage.setItem('authToken', json.token)
                 sessionStorage.setItem('authUser', JSON.stringify(json.user))
+                window.location.href = "/drive";
                 getFileList()
             })
             .catch(err => console.log(err))
@@ -69,6 +70,7 @@ if (signupForm) {
             .then(json => {
                 sessionStorage.setItem('authToken', json.token)
                 sessionStorage.setItem('authUser', JSON.stringify(json.user))
+                window.location.href = "/drive";
                 getFileList()
             })
             .catch(err => console.log(err))
@@ -92,8 +94,15 @@ async function getFileList() {
         headers: myHeaders,
     }).then(response => response.json())
         .then(json => {
-            sessionStorage.setItem('file_list', JSON.stringify(json));
-            window.location.href = "/drive";
+            var list = JSON.stringify(json)
+            sessionStorage.setItem('file_list', list);
+        }).then(() => {
+            var file_list = JSON.parse(sessionStorage.file_list);
+            var htmlValue = document.getElementById("files-list");
+            htmlValue.innerHTML = '';
+            file_list.forEach((file) => {
+                htmlValue.innerHTML += '<div class="container border"><p>' + file.file_name + '</p></div>';
+            })
         })
         .catch(err => console.log(err))
 
@@ -145,8 +154,15 @@ async function getRecentFileList() {
             var fileList = Object.keys(list).map((key) => [Number(key), list[key]]);
             fileList.sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : -1))
             console.log(fileList)
-            sessionStorage.setItem('file_list', JSON.stringify(fileList));
-            window.location.href = "/drive";
+            sessionStorage.setItem('recent_file_list', JSON.stringify(fileList));
+        })
+        .then(() => {
+            var recent_file_list = JSON.parse(sessionStorage.recent_file_list);
+            var htmlValue = document.getElementById("files-list");
+            htmlValue.innerHTML = '';
+            recent_file_list.forEach((file) => {
+                htmlValue.innerHTML += '<div class="container border"><p>' + file[1].file_name + '</p></div>';
+            })
         })
         .catch(err => console.log(err))
 }
