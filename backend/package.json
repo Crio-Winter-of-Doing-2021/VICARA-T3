@@ -24,6 +24,7 @@
     "multer-s3": "^2.9.0",
     "node": "^15.8.0",
     "path": "^0.12.7",
+    "request": "^2.88.2",
     "validator": "^13.5.2"
   },
   "devDependencies": {

@@ -5,6 +5,7 @@ const AWS = require('aws-sdk');
 const file_model = require('../models/file')
 const auth = require('../middleware/auth')
 const path = require('path')
+const request = require('request');
 
 // configure aws and create a s3 object
 AWS.config.update({
@@ -50,22 +51,31 @@ router.post('/upload', auth, async (req, res, next) => {
 });
 
 // Mark a file Favourite
-router.patch('/fav/:id&:fav', (req, res) => {
-    var updated_object = {};
+router.patch('/fav/:file_id&:fav', auth, async (req, res) => {
     var id = req.params.file_id;
     var current_status = req.params.fav;
     var status = false;
+
     if (current_status == "false") {
         status = true;
     }
 
-    file_model.updateOne({ "file_id": id }, { "isFav": status });
+    file_model.findOne({ "_id": id }, (err, doc) => {
+        if (err) console.log(err);
+
+        doc.isFav = status;
+        doc.save();
+    });
+
     res.status(200).send("updated");
 });
 
 // download a file
 router.get('/download/:file_id', auth, async (req, res) => {
-    await file_model.find({ "file_id": req.params.file_id, "owner": req.user._id }, (err, file_detail) => {
+    await file_model.find({ "_id": req.params.file_id, "owner": req.user._id }, (err, file_detail) => {
+        if (err) console.log(err);
+        // console.log(file_detail)
+
         const params = {
             Bucket: file_detail[0].bucket,
             Key: file_detail[0].key
@@ -75,6 +85,7 @@ router.get('/download/:file_id', auth, async (req, res) => {
         const file_location = params.Key;
         res.attachment(file_location);
         const read_stream = s3.getObject(params).createReadStream();
+        //console.log(read_stream)
         read_stream.pipe(res);
     });
 });
@@ -101,6 +112,13 @@ router.delete('/files/:file_id', auth, async (req, res) => {
 // view files
 router.get('/files', auth, async (req, res) => {
     await file_model.find({ "owner": req.user._id }, (ERR, file_list) => {
+        res.send(file_list);
+    });
+});
+
+// view favourite filesList
+router.get('/files/fav', auth, async (req, res) => {
+    await file_model.find({ "owner": req.user._id, "isFav": true }, (ERR, file_list) => {
         res.send(file_list);
     });
 });
