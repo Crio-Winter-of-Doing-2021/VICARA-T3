@@ -109,7 +109,7 @@ function getMyStorageContent(file_list) {
           <button type="button" onclick="download(` + '\'' + download_link + '\'' + `)" class="btn btn-primary">Download</button>
           <button type="button"  onclick = "mark_unmark_trash(` + '\'' + file_details._id + '\'' + `)"" class="btn btn-primary">Move to Trash</button>
           <i title = ${fav_status} id = ${file_details._id} class="${fav_class} fa-heart" onclick = "mark_unmark_fav(` + '\'' + file_details._id + '\'' + `)"></i>
-          <i class="fa fa-trash"></i>
+          <i class="fa fa-trash" onclick = "deleteFile(` + '\'' + file_details._id + '\'' + `)"></i>
         </div>
       </div>`
     }
@@ -135,7 +135,7 @@ function getTrashContent(file_list) {
         <div class="card-body" style="margin: 20px;">
             <h5 style="padding: 5px;" class="card-title">${file_details.file_name}</h5>
             <button type="button" class="btn btn-primary"  onclick = "mark_unmark_trash('${file_details._id}')">Move to Drive</button>
-            <i class="fa fa-trash"></i>
+            <i class="fa fa-trash" onclick = "deleteFile(` + '\'' + file_details._id + '\'' + `)"></i>
         </div>
       </div>`
     }
@@ -293,7 +293,7 @@ function getContent(file_list) {
                 <button type="button" onclick="download(` + '\'' + download_link + '\'' + `)" class="btn btn-primary">Download</button>
                 <button type="button"  onclick = "mark_unmark_trash(` + '\'' + file_details._id + '\'' + `)" class="btn btn-primary">Move to Trash</button>
                 <i title = ${fav_status} id = ${file_details._id} class="${fav_class} fa-heart" onclick = "mark_unmark_fav(` + '\'' + file_details._id + '\'' + `)"></i>
-                <i class="fa fa-trash"></i>
+                <i class="fa fa-trash" onclick = "deleteFile(` + '\'' + file_details._id + '\'' + `)"></i>
             </div>
         </div>`
     }
@@ -375,4 +375,18 @@ async function getFavouriteList() {
             htmlValue.innerHTML = content;
         })
         .catch(err => console.log(err))
+}
+
+//*******************************/
+
+async function deleteFile(file_id) {
+
+    const myHeaders = new Headers({
+        'Authorization': 'Bearer ' + sessionStorage.getItem('authToken'),
+    })
+
+    await fetch('http://localhost:3000/files/' + file_id, {
+        method: 'DELETE',
+        headers: myHeaders,
+    })
 }

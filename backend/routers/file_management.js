@@ -119,11 +119,14 @@ router.get('/download/:file_id', auth, async (req, res) => {
 
 // delete a file
 router.delete('/files/:file_id', auth, async (req, res) => {
+    // const file_detail = await file_model.findOne({ "_id": req.params.file_id, "owner": req.user._id });
     const file_detail = await file_model.findOneAndDelete({ "_id": req.params.file_id, "owner": req.user._id });
 
+    console.log(file_detail)
+
     const params = {
-        Bucket: file_detail[0].bucket,
-        Key: file_detail[0].key
+        Bucket: file_detail.bucket,
+        Key: file_detail.key
     };
 
     s3.deleteObject(params, function (err, data) {
