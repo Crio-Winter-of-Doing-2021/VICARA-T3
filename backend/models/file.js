@@ -13,6 +13,9 @@ let file_schema = new mongoose.Schema({
     isFav: {
         type: Boolean,
     },
+    isTrash: {
+        type: Boolean,
+    },
     file_name: {
         type: String,
         required: true,
