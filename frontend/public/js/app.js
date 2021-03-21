@@ -1,3 +1,16 @@
+const upload_file_btn = document.getElementById("upload-file");
+const choose_file_btn = document.getElementById("choose-file");
+
+if (upload_file_btn) {
+    upload_file_btn.addEventListener("click", () => {
+        choose_file_btn.click();
+        choose_file_btn.addEventListener("change", () => {
+            document.getElementById("submit-btn").click();
+        });
+    });
+}
+
+
 //***********Authentication**********************/
 const sign_in_btn = document.querySelector("#auth_sign-in-btn");
 const sign_up_btn = document.querySelector("#auth_sign-up-btn");
@@ -78,6 +91,13 @@ if (signupForm) {
     })
 }
 
+//*******************************/
+
+
+authName = document.getElementById('authName')
+if (authName) {
+    authName.innerHTML = JSON.parse(sessionStorage.getItem('authUser')).name
+}
 
 
 //************************************************/
@@ -390,3 +410,46 @@ async function deleteFile(file_id) {
         headers: myHeaders,
     })
 }
+
+//************************************************/
+
+async function logoutUser() {
+
+    const myHeaders = new Headers({
+        'Authorization': 'Bearer ' + sessionStorage.getItem('authToken'),
+    })
+
+    await fetch('http://localhost:3000/logout', {
+        method: 'POST',
+        headers: myHeaders,
+    })
+}
+
+//************************************************/
+
+async function logoutAllUser() {
+
+    const myHeaders = new Headers({
+        'Authorization': 'Bearer ' + sessionStorage.getItem('authToken'),
+    })
+
+    await fetch('http://localhost:3000/logoutAll', {
+        method: 'POST',
+        headers: myHeaders,
+    })
+}
+
+//************************************************/
+
+async function deleteUser() {
+    const myHeaders = new Headers({
+        'Authorization': 'Bearer ' + sessionStorage.getItem('authToken'),
+    })
+
+    await fetch('http://localhost:3000/me', {
+        method: 'DELETE',
+        headers: myHeaders,
+    })
+}
+
+//************************************************/

@@ -2,6 +2,16 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const file_model = require('./file')
+const AWS = require('aws-sdk');
+
+// configure aws and create a s3 object
+AWS.config.update({
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    secretAccessKey: process.env.SECRET_ACCESS_KEY
+});
+
+const s3 = new AWS.S3();
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -92,10 +102,42 @@ userSchema.pre('save', async function (next) {
     next()
 })
 
-// Delete user task when user is removed
+// Delete user files when user is removed
 userSchema.pre('remove', async function (next) {
     const user = this
-    await Task.deleteMany({ owner: user._id })
+    await file_model.find({ owner: user._id }, function (err, list) {
+        list.forEach(file => {
+            const params = {
+                Bucket: file.bucket,
+                Key: file.key
+            };
+
+            s3.deleteObject(params, function (err, data) {
+                if (err)
+                    console.log(err);
+                else
+                    console.log("Successfully deleted file from bucket");
+                console.log(data);
+            });
+        });
+    })
+    // var fileList = Object.keys(list).map((key) => [Number(key), list[key]])
+    // console.log(fileList)
+    // fileList.forEach(file => {
+    //     const params = {
+    //         Bucket: file.bucket,
+    //         Key: fil.key
+    //     };
+
+    //     s3.deleteObject(params, function (err, data) {
+    //         if (err)
+    //             console.log(err);
+    //         else
+    //             console.log("Successfully deleted file from bucket");
+    //         console.log(data);
+    //     });
+    // });
+    await file_model.deleteMany({ owner: user._id })
     next()
 })
 

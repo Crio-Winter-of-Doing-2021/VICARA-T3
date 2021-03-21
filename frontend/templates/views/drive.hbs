@@ -57,15 +57,26 @@
 
                             <li><a class="dropdown-item" id="upload-file" href="#">Upload file</a></li>
                             <li><a class="dropdown-item" href="#">Upload folder</a></li>
-                            <script src="js/file_upload.js"></script>
                         </ul>
                     </li>
                 </ul>
-                <form class="d-flex">
+                {{!-- <form class="d-flex">
                     <input class="form-control me-2" style="width: 400px" type="search"
                         placeholder="Search files in your storage" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+                </form> --}}
+                <div class="float-right">
+                    <li class="nav-item dropdown navbar-nav me-auto mb-2 mb-lg-0">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            id="authName" aria-expanded="false">
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="/" onclick="logoutUser()">Logout</a></li>
+                            <li><a class="dropdown-item" href="/" onclick="logoutAllUser()">Logout all sessions</a></li>
+                            <li><a class="dropdown-item" href="/" onclick="deleteUser()">Delete account</a></li>
+                        </ul>
+                    </li>
+                </div>
             </div>
         </div>
     </nav>
