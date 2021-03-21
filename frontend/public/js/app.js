@@ -12,6 +12,14 @@ if (upload_file_btn) {
 
 
 //***********Authentication**********************/
+
+setTimeout(() => {
+    if (localStorage.authToken != null && window.location.href == 'http://localhost:8000/') {
+        window.location.href = "/drive"
+    }
+}, 100)
+
+
 const sign_in_btn = document.querySelector("#auth_sign-in-btn");
 const sign_up_btn = document.querySelector("#auth_sign-up-btn");
 const auth_container = document.querySelector(".auth_container");
@@ -49,8 +57,8 @@ if (loginForm) {
             headers: { "Content-type": "application/json; charset=UTF-8" }
         }).then(response => response.json())
             .then((json) => {
-                sessionStorage.setItem('authToken', json.token)
-                sessionStorage.setItem('authUser', JSON.stringify(json.user))
+                localStorage.setItem('authToken', json.token)
+                localStorage.setItem('authUser', JSON.stringify(json.user))
                 window.location.href = "/drive";
                 getFileList()
             })
@@ -81,8 +89,8 @@ if (signupForm) {
             headers: { "Content-type": "application/json; charset=UTF-8" }
         }).then(response => response.json())
             .then(json => {
-                sessionStorage.setItem('authToken', json.token)
-                sessionStorage.setItem('authUser', JSON.stringify(json.user))
+                localStorage.setItem('authToken', json.token)
+                localStorage.setItem('authUser', JSON.stringify(json.user))
                 window.location.href = "/drive";
                 getFileList()
             })
@@ -93,12 +101,11 @@ if (signupForm) {
 
 //*******************************/
 
-
 authName = document.getElementById('authName')
-if (authName) {
-    authName.innerHTML = JSON.parse(sessionStorage.getItem('authUser')).name
-}
 
+if (authName) {
+    authName.innerHTML = JSON.parse(localStorage.getItem('authUser')).name
+}
 
 //************************************************/
 
@@ -166,7 +173,7 @@ function getTrashContent(file_list) {
 async function getFileList() {
 
     const myHeaders = new Headers({
-        'Authorization': 'Bearer ' + sessionStorage.getItem('authToken'),
+        'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
     })
 
     await fetch('http://localhost:3000/files', {
@@ -175,9 +182,9 @@ async function getFileList() {
     }).then(response => response.json())
         .then(json => {
             var list = JSON.stringify(json)
-            sessionStorage.setItem('file_list', list);
+            localStorage.setItem('file_list', list);
         }).then(() => {
-            var file_list = JSON.parse(sessionStorage.file_list);
+            var file_list = JSON.parse(localStorage.file_list);
             var htmlValue = document.getElementById("files-list");
             htmlValue.innerHTML = getMyStorageContent(file_list);
         })
@@ -192,7 +199,7 @@ async function getFileList() {
 async function getTrashFileList() {
 
     const myHeaders = new Headers({
-        'Authorization': 'Bearer ' + sessionStorage.getItem('authToken'),
+        'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
     })
 
     await fetch('http://localhost:3000/trash', {
@@ -201,9 +208,9 @@ async function getTrashFileList() {
     }).then(response => response.json())
         .then(json => {
             var list = JSON.stringify(json)
-            sessionStorage.setItem('trash_file_list', list);
+            localStorage.setItem('trash_file_list', list);
         }).then(() => {
-            var file_list = JSON.parse(sessionStorage.trash_file_list);
+            var file_list = JSON.parse(localStorage.trash_file_list);
             var htmlValue = document.getElementById("files-list");
             htmlValue.innerHTML = getTrashContent(file_list);
         })
@@ -220,7 +227,7 @@ async function uploadFile() {
     var file = document.getElementById('choose-file');
 
     const myHeaders = new Headers({
-        'Authorization': 'Bearer ' + sessionStorage.getItem('authToken'),
+        'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
     })
 
     for await (let newFile of file.files) {
@@ -244,7 +251,7 @@ async function uploadFile() {
 async function download(download_link) {
     console.log('download')
     const myHeaders = new Headers({
-        'Authorization': 'Bearer ' + sessionStorage.getItem('authToken'),
+        'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
     })
 
     await fetch(download_link, {
@@ -271,7 +278,7 @@ async function mark_unmark_fav(file_id) {
     }
 
     const myHeaders = new Headers({
-        'Authorization': 'Bearer ' + sessionStorage.getItem('authToken'),
+        'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
     })
 
     await fetch('http://localhost:3000/fav/' + file_id + '&' + current_status, {
@@ -328,7 +335,7 @@ function getContent(file_list) {
 async function mark_unmark_trash(file_id) {
 
     const myHeaders = new Headers({
-        'Authorization': 'Bearer ' + sessionStorage.getItem('authToken'),
+        'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
     })
 
     await fetch('http://localhost:3000/trash/' + file_id, {
@@ -346,7 +353,7 @@ async function mark_unmark_trash(file_id) {
 async function getRecentFileList() {
 
     const myHeaders = new Headers({
-        'Authorization': 'Bearer ' + sessionStorage.getItem('authToken'),
+        'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
     })
 
     await fetch('http://localhost:3000/files', {
@@ -358,10 +365,10 @@ async function getRecentFileList() {
             var fileList = Object.keys(list).map((key) => [Number(key), list[key]]);
             fileList.sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : -1))
             console.log(fileList)
-            sessionStorage.setItem('recent_file_list', JSON.stringify(fileList));
+            localStorage.setItem('recent_file_list', JSON.stringify(fileList));
         })
         .then(() => {
-            var recent_file_list = JSON.parse(sessionStorage.recent_file_list);
+            var recent_file_list = JSON.parse(localStorage.recent_file_list);
             var htmlValue = document.getElementById("files-list");
             var content = getContent(recent_file_list);
             htmlValue.innerHTML = content;
@@ -374,7 +381,7 @@ async function getRecentFileList() {
 
 async function getFavouriteList() {
     const myHeaders = new Headers({
-        'Authorization': 'Bearer ' + sessionStorage.getItem('authToken'),
+        'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
     })
 
     await fetch('http://localhost:3000/files/fav', {
@@ -386,10 +393,10 @@ async function getFavouriteList() {
             var fileList = Object.keys(list).map((key) => [Number(key), list[key]]);
             fileList.sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : -1))
             console.log(fileList)
-            sessionStorage.setItem('recent_file_list', JSON.stringify(fileList));
+            localStorage.setItem('recent_file_list', JSON.stringify(fileList));
         })
         .then(() => {
-            var recent_file_list = JSON.parse(sessionStorage.recent_file_list);
+            var recent_file_list = JSON.parse(localStorage.recent_file_list);
             var htmlValue = document.getElementById("files-list");
             var content = getContent(recent_file_list);
             htmlValue.innerHTML = content;
@@ -402,7 +409,7 @@ async function getFavouriteList() {
 async function deleteFile(file_id) {
 
     const myHeaders = new Headers({
-        'Authorization': 'Bearer ' + sessionStorage.getItem('authToken'),
+        'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
     })
 
     await fetch('http://localhost:3000/files/' + file_id, {
@@ -416,13 +423,17 @@ async function deleteFile(file_id) {
 async function logoutUser() {
 
     const myHeaders = new Headers({
-        'Authorization': 'Bearer ' + sessionStorage.getItem('authToken'),
+        'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
     })
+
+    localStorage.clear()
 
     await fetch('http://localhost:3000/logout', {
         method: 'POST',
         headers: myHeaders,
     })
+
+
 }
 
 //************************************************/
@@ -430,8 +441,10 @@ async function logoutUser() {
 async function logoutAllUser() {
 
     const myHeaders = new Headers({
-        'Authorization': 'Bearer ' + sessionStorage.getItem('authToken'),
+        'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
     })
+
+    localStorage.clear()
 
     await fetch('http://localhost:3000/logoutAll', {
         method: 'POST',
@@ -443,8 +456,10 @@ async function logoutAllUser() {
 
 async function deleteUser() {
     const myHeaders = new Headers({
-        'Authorization': 'Bearer ' + sessionStorage.getItem('authToken'),
+        'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
     })
+
+    localStorage.clear()
 
     await fetch('http://localhost:3000/me', {
         method: 'DELETE',
