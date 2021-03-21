@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://kit.fontawesome.com/64d58efce2.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" type="text/css" href="css/style.css" />
+</head>
+
+<body>
+  <div class="auth_container">
+    <div class="auth_forms-container">
+      <div class="auth_signin-signup">
+        <form method="post" class="auth_sign-in-form" id="myLoginForm">
+          <h2 class="auth_title">Log in</h2>
+          <div class="auth_input-field">
+            <i class="fas fa-envelope"></i>
+            <input type="text" name="loginEmail" placeholder="Email" id="login_email" required="" />
+          </div>
+          <div class=" auth_input-field">
+            <i class="fas fa-lock"></i>
+            <input type="password" name="loginPassword" placeholder="Password" id="login_password" required="" />
+          </div>
+          <input type="submit" value="Login" class="auth_btn auth_solid" />
+        </form>
+        <form method="POST" class="auth_sign-up-form" id="mySignupForm">
+          <h2 class="auth_title">Sign up</h2>
+          <div class="auth_input-field">
+            <i class="fas fa-user"></i>
+            <input type="text" placeholder="Name" id="signup_name" required="" />
+          </div>
+          <div class="auth_input-field">
+            <i class="fas fa-envelope"></i>
+            <input type="email" placeholder="Email" id="signup_email" required="" />
+          </div>
+          <div class="auth_input-field">
+            <i class="fas fa-lock"></i>
+            <input type="password" placeholder="Password" id="signup_password" required="" />
+          </div>
+          <a href="#"><input type="submit" class="auth_btn" value="Sign up" /></a>
+        </form>
+      </div>
+    </div>
+
+    <div class="auth_panels-container">
+      <div class="auth_panel auth_left-panel">
+        <div class="auth_content">
+          <h3>New here ?</h3>
+          <p>
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis,
+            ex ratione. Aliquid!
+          </p>
+          <button class="auth_btn auth_transparent" id="auth_sign-up-btn">
+            Sign up
+          </button>
+        </div>
+        <img src="img/log.svg" class="auth_image" alt="" />
+      </div>
+      <div class="auth_panel auth_right-panel">
+        <div class="auth_content">
+          <h3>One of us ?</h3>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
+            laboriosam ad deleniti.
+          </p>
+          <button class="auth_btn auth_transparent" id="auth_sign-in-btn">
+            Log in
+          </button>
+        </div>
+        <img src="img/register.svg" class="auth_image" alt="" />
+      </div>
+    </div>
+  </div>
+  <script type="module" src="js/app.js"></script>
+</body>
+
+</html>
