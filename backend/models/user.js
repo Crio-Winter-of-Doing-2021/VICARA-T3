@@ -121,22 +121,6 @@ userSchema.pre('remove', async function (next) {
             });
         });
     })
-    // var fileList = Object.keys(list).map((key) => [Number(key), list[key]])
-    // console.log(fileList)
-    // fileList.forEach(file => {
-    //     const params = {
-    //         Bucket: file.bucket,
-    //         Key: fil.key
-    //     };
-
-    //     s3.deleteObject(params, function (err, data) {
-    //         if (err)
-    //             console.log(err);
-    //         else
-    //             console.log("Successfully deleted file from bucket");
-    //         console.log(data);
-    //     });
-    // });
     await file_model.deleteMany({ owner: user._id })
     next()
 })
