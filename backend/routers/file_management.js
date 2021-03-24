@@ -18,7 +18,7 @@ const s3 = new AWS.S3();
 // upload a file
 router.post('/upload', auth, async (req, res, next) => {
     let file = req.files.uploadFile;
-    const file_content = Buffer.from(file.data, 'binary');
+    const file_content = Buffer.from(file.data, 'base64');
     const params = {
         Bucket: process.env.BUCKET_NAME,
         Key: file.name,
@@ -101,19 +101,21 @@ router.patch('/trash/:file_id', auth, async (req, res) => {
 router.get('/download/:file_id', auth, async (req, res) => {
     await file_model.find({ "_id": req.params.file_id, "owner": req.user._id }, (err, file_detail) => {
         if (err) console.log(err);
-        // console.log(file_detail)
 
         const params = {
             Bucket: file_detail[0].bucket,
             Key: file_detail[0].key
         };
 
-        // file location where the downloaded file will be saved
-        const file_location = params.Key;
-        res.attachment(file_location);
-        const read_stream = s3.getObject(params).createReadStream();
-        //console.log(read_stream)
-        read_stream.pipe(res);
+        s3.getObject(params, function (err, data) {
+            if (err) {
+                throw err
+            }
+            console.log(data.Body)
+            res.send(data.Body)
+            // fs.writeFileSync(params.Key, data.Body)
+            console.log('file downloaded successfully')
+        })
     });
 });
 

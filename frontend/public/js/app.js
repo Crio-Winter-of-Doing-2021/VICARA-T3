@@ -110,7 +110,6 @@ if (authName) {
 //************************************************/
 
 function getMyStorageContent(file_list) {
-    let download_link = 'http://localhost:3000/download/'
     let len = file_list.length;
     let content = ``;
     if (len == 0) {
@@ -126,17 +125,16 @@ function getMyStorageContent(file_list) {
             fav_class = "fas";
         }
 
-        download_link += file_details._id;
+        // <h6 class="card-subtitle mb-2 text-muted"><span style="color: red">Created : </span> ${beautify_time(file_details.createdAt)}</h6>
+        // <h6 class="card-subtitle mb-2 text-muted"><span style="color: red">Updated : </span> ${beautify_time(file_details.updatedAt)}</h6>
+
         content += `<div class="card" style="padding: 10px; width: 70%; margin-top:35px; margin-left: 35px; border: 2px solid; border-radius: 20px;   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
         <div class="card-body" style="margin: 20px;">
           <h5 style="padding: 5px;" class="card-title">${file_details.file_name}</h5>
-          <h6 class="card-subtitle mb-2 text-muted"><span style="color: red">Created : </span> ${beautify_time(file_details.createdAt)}</h6>
-          <h6 class="card-subtitle mb-2 text-muted"><span style="color: red">Updated : </span> ${beautify_time(file_details.updatedAt)}</h6>
-          <p class="card-text"></p>
-          <button type="button" onclick="download(` + '\'' + download_link + '\'' + `)" class="btn btn-primary">Download</button>
+          <button type="button" onclick="download(`+ '\'' + file_details.file_name + '\'' + `,` + '\'' + file_details._id + '\'' + `)" class="btn btn-primary"><i class="fa fa-download"></i></button>
           <button type="button"  onclick = "mark_unmark_trash(` + '\'' + file_details._id + '\'' + `)"" class="btn btn-primary">Move to Trash</button>
+          <button type="button" class="btn btn-primary"  onclick = "deleteFile(` + '\'' + file_details._id + '\'' + `)"><i class="fa fa-trash"></i></button>
           <i title = ${fav_status} id = ${file_details._id} class="${fav_class} fa-heart" onclick = "mark_unmark_fav(` + '\'' + file_details._id + '\'' + `)"></i>
-          <i class="fa fa-trash" onclick = "deleteFile(` + '\'' + file_details._id + '\'' + `)"></i>
         </div>
       </div>`
     }
@@ -248,16 +246,35 @@ async function uploadFile() {
 
 //************************************************/
 
-async function download(download_link) {
-    console.log('download')
+function downloadFile(filename, file) {
+    const blob = new Blob([file], { type: 'text/plain' });
+    var myFile = new File([blob], filename)
+
+    var element = document.createElement('a');
+    element.setAttribute('download', filename);
+    element.setAttribute('href', window.URL.createObjectURL(myFile));
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+}
+
+async function download(file_name, file_id) {
     const myHeaders = new Headers({
         'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
     })
 
-    await fetch(download_link, {
+    await fetch('http://localhost:3000/download/' + file_id, {
         method: 'GET',
         headers: myHeaders,
-    });
+    }).then((file) => {
+        return file.text()
+    }).then((data) => {
+        downloadFile(file_name, data)
+    })
 }
 
 // ********************************/
@@ -317,7 +334,7 @@ function getContent(file_list) {
                 <h6 class="card-subtitle mb-2 text-muted"><span style="color: red">Created : </span> ${beautify_time(file_details.createdAt)}</h6>
                 <h6 class="card-subtitle mb-2 text-muted"><span style="color: red">Updated : </span> ${beautify_time(file_details.updatedAt)}</h6>
                 <p class="card-text"></p>
-                <button type="button" onclick="download(` + '\'' + download_link + '\'' + `)" class="btn btn-primary">Download</button>
+                <button type="button" onclick="download(` + '\'' + download_link + '\'' + `)" class="btn btn-primary"><i class="fa fa-download"></i></button>
                 <button type="button"  onclick = "mark_unmark_trash(` + '\'' + file_details._id + '\'' + `)" class="btn btn-primary">Move to Trash</button>
                 <i title = ${fav_status} id = ${file_details._id} class="${fav_class} fa-heart" onclick = "mark_unmark_fav(` + '\'' + file_details._id + '\'' + `)"></i>
                 <i class="fa fa-trash" onclick = "deleteFile(` + '\'' + file_details._id + '\'' + `)"></i>
