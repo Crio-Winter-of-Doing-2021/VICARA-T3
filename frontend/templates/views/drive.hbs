@@ -81,6 +81,54 @@
         </div>
     </nav>
 
+    <ul class="dropdown-menu text-center" id="contextMenu" role="menu" aria-labelledby="dropdownMenu"
+        style="display:none;">
+        <li><a tabindex="-1" href="#" style="text-decoration:none;color: black;">Rename</a></li>
+        <hr>
+        <li><a tabindex="-1" href="#" style="text-decoration:none;color: black;">Details</a></li>
+        <hr>
+        <li><a tabindex="-1" href="#" style="text-decoration:none;color: black;">Move to Trash</a></li>
+        <hr>
+        <li><a tabindex="-1" href="#" style="text-decoration:none;color: black;">Delete</a></li>
+    </ul>
+
+    {{!-- <div id="rename-popup" style="display: none;">
+        <form id="form-popup">
+            <label for="email"><b>File Name</b></label>
+            <input type="text" id="rename" placeholder="Enter Name" required>
+            <input type="submit" class="btn btn-light" value="Rename">
+        </form>
+    </div> --}}
+
+    <!-- Button trigger modal -->
+    <button id="rename-popup" style="display: none;" type="button" class="btn btn-primary" data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop">
+        Launch static backdrop modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Rename file</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="form-popup">
+                    <div class="modal-body">
+                        <label><b>File Name</b></label>
+                        <input type="text" id="rename" placeholder="Enter file name" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-dark" id="submit-popup">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Display list of files -->
     <script src="js/app.js"></script>
     <div id="files-list"></div>

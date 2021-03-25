@@ -162,5 +162,12 @@ router.get('/files/fav', auth, async (req, res) => {
     });
 });
 
+// rename file
+router.patch('/rename/:file_id', auth, async (req, res) => {
+    const newName = req.body.newName;
+    await file_model.findOneAndUpdate({ "_id": req.params.file_id, "owner": req.user._id }, { "file_name": newName, "updatedAt": Date.now }, (ERR, file) => {
+        res.send(file);
+    });
+});
 
 module.exports = router

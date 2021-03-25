@@ -128,15 +128,11 @@ function getMyStorageContent(file_list) {
         // <h6 class="card-subtitle mb-2 text-muted"><span style="color: red">Created : </span> ${beautify_time(file_details.createdAt)}</h6>
         // <h6 class="card-subtitle mb-2 text-muted"><span style="color: red">Updated : </span> ${beautify_time(file_details.updatedAt)}</h6>
 
-        content += `<div class="card" style="padding: 10px; width: 70%; margin-top:35px; margin-left: 35px; border: 2px solid; border-radius: 20px;   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
-        <div class="card-body" style="margin: 20px;">
-          <h5 style="padding: 5px;" class="card-title">${file_details.file_name}</h5>
-          <button type="button" onclick="download(`+ '\'' + file_details.file_name + '\'' + `,` + '\'' + file_details._id + '\'' + `)" class="btn btn-primary"><i class="fa fa-download"></i></button>
-          <button type="button"  onclick = "mark_unmark_trash(` + '\'' + file_details._id + '\'' + `)"" class="btn btn-primary">Move to Trash</button>
-          <button type="button" class="btn btn-primary"  onclick = "deleteFile(` + '\'' + file_details._id + '\'' + `)"><i class="fa fa-trash"></i></button>
-          <i title = ${fav_status} id = ${file_details._id} class="${fav_class} fa-heart" onclick = "mark_unmark_fav(` + '\'' + file_details._id + '\'' + `)"></i>
+        content += `<div id="${file_details._id}" oncontextmenu="getContextMenu(` + '\'' + file_details._id + '\'' + `)" class="card" style="width: 80vw; margin-top:35px; margin-left: 35px; border: 2px solid; border-radius: 20px;   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+        <div class="card-body">
+            <h5 class="card-title">${file_details.file_name}</h5><i title = ${fav_status} id = ${file_details._id} class="${fav_class} fa-heart" onclick = "mark_unmark_fav(` + '\'' + file_details._id + '\'' + `)"></i>
         </div>
-      </div>`
+        </div>`
     }
 
     return content;
@@ -483,5 +479,65 @@ async function deleteUser() {
         headers: myHeaders,
     })
 }
+//************************************************/
+
+async function renameFile(file_id) {
+    console.log(file_id)
+    var renamePopup = document.getElementById('rename-popup')
+    renamePopup.click()
+    var formPopup = document.getElementById('form-popup')
+    formPopup.addEventListener('submit', async () => {
+        var newName = document.getElementById('rename').value
+        console.log(newName)
+
+        const obj = {
+            'newName': newName
+        }
+
+        const myHeaders = new Headers({
+            "Content-type": "application/json; charset=UTF-8",
+            'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
+        })
+
+        await fetch('http://localhost:3000/rename/' + file_id, {
+            method: 'PATCH',
+            headers: myHeaders,
+            body: JSON.stringify(obj),
+        }).then((_) => {
+            window.location.href = "/drive";
+            getFileList()
+        })
+    })
+}
+
 
 //************************************************/
+
+document.onclick = hideMenu;
+document.oncontextmenu = () => { return false };
+
+function hideMenu() {
+    document.getElementById("contextMenu").style.display = "none"
+}
+
+function getContextMenu(id) {
+    var e = window.event;
+
+    if (document.getElementById("contextMenu").style.display == "block")
+        hideMenu();
+    else {
+        var menu = document.getElementById("contextMenu")
+        menu.style.left = e.pageX + "px";
+        menu.style.top = e.pageY + "px";
+        menu.style.display = 'block';
+
+        var rename = menu.childNodes[1].childNodes[0];
+        rename.onclick = () => { renameFile(id) }
+        var details = menu.childNodes[5].childNodes[0];
+        details.onclick = () => { console.log('details') }
+        var moveToTrash = menu.childNodes[9].childNodes[0]
+        moveToTrash.onclick = () => { mark_unmark_trash(id) }
+        var delFile = menu.childNodes[13].childNodes[0]
+        delFile.onclick = () => { deleteFile(id) }
+    }
+}
