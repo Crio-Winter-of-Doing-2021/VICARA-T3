@@ -18,11 +18,12 @@ const s3 = new AWS.S3();
 // upload a file
 router.post('/upload', auth, async (req, res, next) => {
     let file = req.files.uploadFile;
+    console.log(file)
     const file_content = Buffer.from(file.data, 'base64');
     const params = {
         Bucket: process.env.BUCKET_NAME,
         Key: file.name,
-        Body: file_content
+        Body: file_content,
     };
 
     // insert file details in db
@@ -112,6 +113,7 @@ router.get('/download/:file_id', auth, async (req, res) => {
                 throw err
             }
             console.log(data.Body)
+            fs.writeFile('image_decoded.jpg', data.Body, function (err) { });
             res.send(data.Body)
             // fs.writeFileSync(params.Key, data.Body)
             console.log('file downloaded successfully')

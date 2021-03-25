@@ -83,6 +83,8 @@
 
     <ul class="dropdown-menu text-center" id="contextMenu" role="menu" aria-labelledby="dropdownMenu"
         style="display:none;">
+        <li><a tabindex="-1" href="#" style="text-decoration:none;color: black;">Download</a></li>
+        <hr>
         <li><a tabindex="-1" href="#" style="text-decoration:none;color: black;">Rename</a></li>
         <hr>
         <li><a tabindex="-1" href="#" style="text-decoration:none;color: black;">Details</a></li>
@@ -91,14 +93,6 @@
         <hr>
         <li><a tabindex="-1" href="#" style="text-decoration:none;color: black;">Delete</a></li>
     </ul>
-
-    {{!-- <div id="rename-popup" style="display: none;">
-        <form id="form-popup">
-            <label for="email"><b>File Name</b></label>
-            <input type="text" id="rename" placeholder="Enter Name" required>
-            <input type="submit" class="btn btn-light" value="Rename">
-        </form>
-    </div> --}}
 
     <!-- Button trigger modal -->
     <button id="rename-popup" style="display: none;" type="button" class="btn btn-primary" data-bs-toggle="modal"

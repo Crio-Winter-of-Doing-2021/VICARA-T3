@@ -128,7 +128,7 @@ function getMyStorageContent(file_list) {
         // <h6 class="card-subtitle mb-2 text-muted"><span style="color: red">Created : </span> ${beautify_time(file_details.createdAt)}</h6>
         // <h6 class="card-subtitle mb-2 text-muted"><span style="color: red">Updated : </span> ${beautify_time(file_details.updatedAt)}</h6>
 
-        content += `<div id="${file_details._id}" oncontextmenu="getContextMenu(` + '\'' + file_details._id + '\'' + `)" class="card" style="width: 80vw; margin-top:35px; margin-left: 35px; border: 2px solid; border-radius: 20px;   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+        content += `<div id="${file_details._id}" oncontextmenu="getContextMenu(` + '\'' + file_details.file_name + '\'' + ',' + '\'' + file_details._id + '\'' + `)" class="card" style="width: 80vw; margin-top:35px; margin-left: 35px; border: 2px solid; border-radius: 20px;   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
         <div class="card-body">
             <h5 class="card-title">${file_details.file_name}</h5><i title = ${fav_status} id = ${file_details._id} class="${fav_class} fa-heart" onclick = "mark_unmark_fav(` + '\'' + file_details._id + '\'' + `)"></i>
         </div>
@@ -219,16 +219,16 @@ async function getTrashFileList() {
 
 async function uploadFile() {
     var file = document.getElementById('choose-file');
-
-    const myHeaders = new Headers({
-        'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
-    })
+    var token = localStorage.getItem('authToken');
 
     for await (let newFile of file.files) {
         console.log(newFile)
         var allFile = new FormData();
         allFile.append('uploadFile', newFile)
 
+        const myHeaders = new Headers({
+            'Authorization': 'Bearer ' + token,
+        })
 
         fetch('http://localhost:3000/upload', {
             method: 'POST',
@@ -267,7 +267,7 @@ async function download(file_name, file_id) {
         method: 'GET',
         headers: myHeaders,
     }).then((file) => {
-        return file.text()
+        return file.blob()
     }).then((data) => {
         downloadFile(file_name, data)
     })
@@ -520,7 +520,7 @@ function hideMenu() {
     document.getElementById("contextMenu").style.display = "none"
 }
 
-function getContextMenu(id) {
+function getContextMenu(filename, id) {
     var e = window.event;
 
     if (document.getElementById("contextMenu").style.display == "block")
@@ -531,13 +531,15 @@ function getContextMenu(id) {
         menu.style.top = e.pageY + "px";
         menu.style.display = 'block';
 
-        var rename = menu.childNodes[1].childNodes[0];
+        var downFile = menu.childNodes[1].childNodes[0];
+        downFile.onclick = () => { download(filename, id) }
+        var rename = menu.childNodes[5].childNodes[0];
         rename.onclick = () => { renameFile(id) }
-        var details = menu.childNodes[5].childNodes[0];
+        var details = menu.childNodes[9].childNodes[0];
         details.onclick = () => { console.log('details') }
-        var moveToTrash = menu.childNodes[9].childNodes[0]
+        var moveToTrash = menu.childNodes[13].childNodes[0]
         moveToTrash.onclick = () => { mark_unmark_trash(id) }
-        var delFile = menu.childNodes[13].childNodes[0]
+        var delFile = menu.childNodes[17].childNodes[0]
         delFile.onclick = () => { deleteFile(id) }
     }
 }
