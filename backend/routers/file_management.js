@@ -113,7 +113,6 @@ router.get('/download/:file_id', auth, async (req, res) => {
                 throw err
             }
             console.log(data.Body)
-            fs.writeFile('image_decoded.jpg', data.Body, function (err) { });
             res.send(data.Body)
             // fs.writeFileSync(params.Key, data.Body)
             console.log('file downloaded successfully')
