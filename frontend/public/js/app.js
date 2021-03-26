@@ -1,5 +1,10 @@
+const home = document.getElementById('main-home')
+home.click()
+
+//*********************************************************/
 const upload_file_btn = document.getElementById("upload-file");
 const choose_file_btn = document.getElementById("choose-file");
+
 
 if (upload_file_btn) {
     upload_file_btn.addEventListener("click", () => {
@@ -60,7 +65,6 @@ if (loginForm) {
                 localStorage.setItem('authToken', json.token)
                 localStorage.setItem('authUser', JSON.stringify(json.user))
                 window.location.href = "/drive";
-                getFileList()
             })
             .catch(err => console.log(err))
     })
@@ -92,7 +96,6 @@ if (signupForm) {
                 localStorage.setItem('authToken', json.token)
                 localStorage.setItem('authUser', JSON.stringify(json.user))
                 window.location.href = "/drive";
-                getFileList()
             })
             .catch(err => console.log(err))
 
@@ -361,11 +364,10 @@ async function mark_unmark_trash(file_id) {
         headers: myHeaders,
     }).then((_) => {
         window.location.href = "/drive";
-        getFileList();
     });
 }
 
-// *******************************/ 
+// ***********************************************/ 
 //************************************************/
 
 async function getRecentFileList() {
@@ -410,14 +412,8 @@ async function getFavouriteList() {
         .then(json => {
             var list = JSON.parse(JSON.stringify(json))
             var fileList = Object.keys(list).map((key) => [Number(key), list[key]]);
-            fileList.sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : -1))
-            console.log(fileList)
-            localStorage.setItem('recent_file_list', JSON.stringify(fileList));
-        })
-        .then(() => {
-            var recent_file_list = JSON.parse(localStorage.recent_file_list);
             var htmlValue = document.getElementById("files-list");
-            var content = getContent(recent_file_list);
+            var content = getContent(fileList);
             htmlValue.innerHTML = content;
         })
         .catch(err => console.log(err))
@@ -511,7 +507,6 @@ async function renameFile(file_id) {
             body: JSON.stringify(obj),
         }).then((_) => {
             window.location.href = "/drive";
-            getFileList()
         })
     })
 }
