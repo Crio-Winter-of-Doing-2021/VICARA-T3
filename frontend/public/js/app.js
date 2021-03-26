@@ -110,11 +110,20 @@ if (authName) {
 //************************************************/
 
 function getMyStorageContent(file_list) {
+    var trashLabel = document.getElementById('a4')
+    trashLabel.innerHTML = 'Move to Trash'
+
     let len = file_list.length;
     let content = ``;
     if (len == 0) {
-        content += "<h1 style='color: red; padding: 20px'>No files are added in this section !!! </h1>"
+        content += `<div class="jumbotron jumbotron-fluid text-center">
+        <div class="container">
+          <h1 class="display-4">Empty</h1>
+          <p class="lead">Add some files to Favorites</p>
+        </div>
+      </div>`
     }
+
     for (let i = 0; i < len; i++) {
         let file_details = file_list[i];
         let fav_status = 'mark-as-favourite';
@@ -125,14 +134,12 @@ function getMyStorageContent(file_list) {
             fav_class = "fas";
         }
 
-        // <h6 class="card-subtitle mb-2 text-muted"><span style="color: red">Created : </span> ${beautify_time(file_details.createdAt)}</h6>
-        // <h6 class="card-subtitle mb-2 text-muted"><span style="color: red">Updated : </span> ${beautify_time(file_details.updatedAt)}</h6>
-
-        content += `<div id="${file_details._id}" oncontextmenu="getContextMenu(` + '\'' + file_details.file_name + '\'' + ',' + '\'' + file_details._id + '\'' + `)" class="card" style="width: 80vw; margin-top:35px; margin-left: 35px; border: 2px solid; border-radius: 20px;   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
-        <div class="card-body">
-            <h5 class="card-title">${file_details.file_name}</h5><i title = ${fav_status} id = ${file_details._id} class="${fav_class} fa-heart" onclick = "mark_unmark_fav(` + '\'' + file_details._id + '\'' + `)"></i>
+        content += `<li class="list-group-item bg-transparent"><div oncontextmenu="getContextMenu(` + '\'' + file_details.createdAt + '\'' + ',' + '\'' + file_details.updatedAt + '\'' + ',' + '\'' + file_details.file_name + '\'' + ',' + '\'' + file_details._id + '\'' + `)">
+        <div class="row g-0">
+        <div class="col-sm-6 col-md-8"><h5>${file_details.file_name}</h5></div>
+        <i title = "${fav_status}" id = "${file_details._id}" class="${fav_class} fa-heart col-6 col-md-4" onclick = "mark_unmark_fav(` + '\'' + file_details._id + '\'' + `)"></i>
         </div>
-        </div>`
+        </div></li>`
     }
 
     return content;
@@ -146,19 +153,23 @@ function getMyStorageContent(file_list) {
 function getTrashContent(file_list) {
     let len = file_list.length;
     let content = ``;
+
     if (len == 0) {
-        content += "<h1 style='color: red; padding: 20px'>No files are added in this section !!! </h1>"
+        content += `<div class="jumbotron jumbotron-fluid text-center">
+        <div class="container">
+          <h1 class="display-4">Empty</h1>
+          <p class="lead">Add some files to Trash</p>
+        </div>
+      </div>`
     }
     for (let i = 0; i < len; i++) {
         let file_details = file_list[i];
 
-        content += `<div class="card" style="padding: 10px; width: 70%; margin-top:35px; margin-left: 35px; border: 2px solid; border-radius: 20px;   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
-        <div class="card-body" style="margin: 20px;">
-            <h5 style="padding: 5px;" class="card-title">${file_details.file_name}</h5>
-            <button type="button" class="btn btn-primary"  onclick = "mark_unmark_trash('${file_details._id}')">Move to Drive</button>
-            <i class="fa fa-trash" onclick = "deleteFile(` + '\'' + file_details._id + '\'' + `)"></i>
+        content += `<li class="list-group-item bg-transparent"><div oncontextmenu="getContextMenu(` + '\'' + file_details.createdAt + '\'' + ',' + '\'' + file_details.updatedAt + '\'' + ',' + '\'' + file_details.file_name + '\'' + ',' + '\'' + file_details._id + '\'' + `)">
+        <div class="row g-0">
+        <div class="col-sm-6 col-md-8"><h5>${file_details.file_name}</h5></div>
         </div>
-      </div>`
+        </div></li>`
     }
 
     return content;
@@ -169,6 +180,8 @@ async function getFileList() {
     const myHeaders = new Headers({
         'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
     })
+    var trashLabel = document.getElementById('a4')
+    trashLabel.innerHTML = 'Move to Trash'
 
     await fetch('http://localhost:3000/files', {
         method: "GET",
@@ -176,22 +189,18 @@ async function getFileList() {
     }).then(response => response.json())
         .then(json => {
             var list = JSON.stringify(json)
-            localStorage.setItem('file_list', list);
-        }).then(() => {
-            var file_list = JSON.parse(localStorage.file_list);
+            var file_list = JSON.parse(list);
             var htmlValue = document.getElementById("files-list");
             htmlValue.innerHTML = getMyStorageContent(file_list);
         })
         .catch(err => console.log(err))
-
-
-    // document.getElementById("files-list").innerHTML = authUser;
 }
 
 //******************************************************/
 
 async function getTrashFileList() {
-
+    var trashLabel = document.getElementById('a4')
+    trashLabel.innerHTML = 'Move to Drive'
     const myHeaders = new Headers({
         'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
     })
@@ -202,9 +211,7 @@ async function getTrashFileList() {
     }).then(response => response.json())
         .then(json => {
             var list = JSON.stringify(json)
-            localStorage.setItem('trash_file_list', list);
-        }).then(() => {
-            var file_list = JSON.parse(localStorage.trash_file_list);
+            var file_list = JSON.parse(list);
             var htmlValue = document.getElementById("files-list");
             htmlValue.innerHTML = getTrashContent(file_list);
         })
@@ -277,8 +284,8 @@ async function download(file_name, file_id) {
 
 async function mark_unmark_fav(file_id) {
     let element = document.getElementById(file_id);
-    // console.log(element)
     let current_status;
+    console.log(element)
 
     if (element.classList.contains("far")) {
         element.classList.remove("far");
@@ -301,16 +308,21 @@ async function mark_unmark_fav(file_id) {
 }
 
 // *******************************/ 
-function beautify_time(time) {
-    return '<span style="color: black"> Date - </span>' + time.substring(0, 8) + time.substring(11, 13) + ' ... <span style="color: black"> Time - </span>' + time.substring(14, 19);
-}
+
 
 function getContent(file_list) {
-    let download_link = 'http://localhost:3000/download/'
+    var trashLabel = document.getElementById('a4')
+    trashLabel.innerHTML = 'Move to Trash'
+
     let len = file_list.length;
     let content = ``;
     if (len == 0) {
-        content += "<h1 style='color: red; padding: 20px'>No files are added in this section !!! </h1>"
+        content += `<div class="jumbotron jumbotron-fluid text-center">
+        <div class="container">
+          <h1 class="display-4">Empty</h1>
+          <p class="lead">Add some files to Favorites</p>
+        </div>
+      </div>`
     }
     for (let i = 0; i < len; i++) {
         let file_details = file_list[i][1];
@@ -322,20 +334,13 @@ function getContent(file_list) {
             fav_class = "fas";
         }
 
-        download_link += file_details._id;
-        content += `
-        <div class="card" style="padding: 10px; width: 70%; margin-top:35px; margin-left: 35px; border: 2px solid; border-radius: 20px;   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
-            <div class="card-body" style="margin: 20px;">
-                <h5 style="padding: 5px;" class="card-title">${file_details.file_name}</h5>
-                <h6 class="card-subtitle mb-2 text-muted"><span style="color: red">Created : </span> ${beautify_time(file_details.createdAt)}</h6>
-                <h6 class="card-subtitle mb-2 text-muted"><span style="color: red">Updated : </span> ${beautify_time(file_details.updatedAt)}</h6>
-                <p class="card-text"></p>
-                <button type="button" onclick="download(` + '\'' + download_link + '\'' + `)" class="btn btn-primary"><i class="fa fa-download"></i></button>
-                <button type="button"  onclick = "mark_unmark_trash(` + '\'' + file_details._id + '\'' + `)" class="btn btn-primary">Move to Trash</button>
-                <i title = ${fav_status} id = ${file_details._id} class="${fav_class} fa-heart" onclick = "mark_unmark_fav(` + '\'' + file_details._id + '\'' + `)"></i>
-                <i class="fa fa-trash" onclick = "deleteFile(` + '\'' + file_details._id + '\'' + `)"></i>
-            </div>
-        </div>`
+        content += `<li class="list-group-item bg-transparent"><div oncontextmenu="getContextMenu(` + '\'' + file_details.createdAt + '\'' + ',' + '\'' + file_details.updatedAt + '\'' + ',' + '\'' + file_details.file_name + '\'' + ',' + '\'' + file_details._id + '\'' + `)">
+        <div class="row g-0">
+        <div class="col-sm-6 col-md-8"><h5>${file_details.file_name}</h5></div>
+        <i title = ${fav_status} id = ${file_details._id} class="${fav_class} fa-heart col-6 col-md-4" onclick = "mark_unmark_fav(` + '\'' + file_details._id + '\'' + `)"></i>
+
+        </div>
+        </div></li>`
     }
 
     return content;
@@ -364,7 +369,8 @@ async function mark_unmark_trash(file_id) {
 //************************************************/
 
 async function getRecentFileList() {
-
+    var trashLabel = document.getElementById('a4')
+    trashLabel.innerHTML = 'Move to Trash'
     const myHeaders = new Headers({
         'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
     })
@@ -376,14 +382,12 @@ async function getRecentFileList() {
         .then(json => {
             var list = JSON.parse(JSON.stringify(json))
             var fileList = Object.keys(list).map((key) => [Number(key), list[key]]);
-            fileList.sort((a, b) => (a.updatedAt > b.updatedAt ? 1 : -1))
+            fileList.sort(function (a, b) {
+                return new Date(b[1].updatedAt) - new Date(a[1].updatedAt)
+            });
             console.log(fileList)
-            localStorage.setItem('recent_file_list', JSON.stringify(fileList));
-        })
-        .then(() => {
-            var recent_file_list = JSON.parse(localStorage.recent_file_list);
             var htmlValue = document.getElementById("files-list");
-            var content = getContent(recent_file_list);
+            var content = getContent(fileList);
             htmlValue.innerHTML = content;
         })
         .catch(err => console.log(err))
@@ -393,6 +397,8 @@ async function getRecentFileList() {
 //*******************************/
 
 async function getFavouriteList() {
+    var trashLabel = document.getElementById('a4')
+    trashLabel.innerHTML = 'Move to Trash'
     const myHeaders = new Headers({
         'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
     })
@@ -520,7 +526,7 @@ function hideMenu() {
     document.getElementById("contextMenu").style.display = "none"
 }
 
-function getContextMenu(filename, id) {
+function getContextMenu(createTime, updateTime, filename, id) {
     var e = window.event;
 
     if (document.getElementById("contextMenu").style.display == "block")
@@ -536,10 +542,26 @@ function getContextMenu(filename, id) {
         var rename = menu.childNodes[5].childNodes[0];
         rename.onclick = () => { renameFile(id) }
         var details = menu.childNodes[9].childNodes[0];
-        details.onclick = () => { console.log('details') }
+        details.onclick = () => { detailPopup(createTime, updateTime, filename) }
         var moveToTrash = menu.childNodes[13].childNodes[0]
         moveToTrash.onclick = () => { mark_unmark_trash(id) }
         var delFile = menu.childNodes[17].childNodes[0]
         delFile.onclick = () => { deleteFile(id) }
     }
 }
+
+//************************************************/
+
+function detailPopup(createTime, updateTime, filename) {
+    var detailPopupBtn = document.getElementById('detail-popup')
+    detailPopupBtn.click();
+    var createT = document.getElementById('create')
+    createT.innerHTML = new Date(createTime).toUTCString()
+    var updateT = document.getElementById('update')
+    updateT.innerHTML = new Date(updateTime).toUTCString()
+    var fileName = document.getElementById('detail-name')
+    fileName.innerHTML = filename
+}
+
+//************************************************/
+//************************************************/

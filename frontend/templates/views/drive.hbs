@@ -12,9 +12,9 @@
     <title>Enterprise storage</title>
 </head>
 
-<body style="background-color: rgb(0, 128, 128, 0.2)">
+<body>
     <!-- Add header -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
                 {{!-- <img src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="30" height="24"
@@ -83,15 +83,15 @@
 
     <ul class="dropdown-menu text-center" id="contextMenu" role="menu" aria-labelledby="dropdownMenu"
         style="display:none;">
-        <li><a tabindex="-1" href="#" style="text-decoration:none;color: black;">Download</a></li>
+        <li><a id="a1" tabindex="-1" href="#" style="text-decoration:none;color: black;">Download</a></li>
         <hr>
-        <li><a tabindex="-1" href="#" style="text-decoration:none;color: black;">Rename</a></li>
+        <li><a id="a2" tabindex="-1" href="#" style="text-decoration:none;color: black;">Rename</a></li>
         <hr>
-        <li><a tabindex="-1" href="#" style="text-decoration:none;color: black;">Details</a></li>
+        <li><a id="a3" tabindex="-1" href="#" style="text-decoration:none;color: black;">Details</a></li>
         <hr>
-        <li><a tabindex="-1" href="#" style="text-decoration:none;color: black;">Move to Trash</a></li>
+        <li><a id="a4" tabindex="-1" href="#" style="text-decoration:none;color: black;">Move to Trash</a></li>
         <hr>
-        <li><a tabindex="-1" href="#" style="text-decoration:none;color: black;">Delete</a></li>
+        <li><a id="a5" tabindex="-1" href="#" style="text-decoration:none;color: black;">Delete</a></li>
     </ul>
 
     <!-- Button trigger modal -->
@@ -119,6 +119,36 @@
                         <button type="submit" class="btn btn-dark" id="submit-popup">Submit</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Button trigger modal -->
+    <button id="detail-popup" style="display: none;" type="button" class="btn btn-primary" data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop1">
+        Launch static backdrop modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdrop1Label" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="detail-name" class="modal-title" id="staticBackdropLabel1"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6><span style="color: black">Created At: </span>
+                        <span id="create" class="card-subtitle mb-2 text-muted"></span>
+                    </h6>
+                    <h6><span style="color: black">Updated At: </span>
+                        <span id="update" class="card-subtitle mb-2 text-muted"> </span>
+                    </h6>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
