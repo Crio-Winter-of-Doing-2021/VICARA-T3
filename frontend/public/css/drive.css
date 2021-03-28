@@ -1,14 +1,68 @@
 .fa-heart {
-    position: relative;
-    left: 30%;
-    font-size: 30px;
+    font-size: 1.5em;
 }
 
 .fa-heart:hover {
-    color: red;
+    color: grey;
 }
 
 .fas {
-    color: red;
+    color: black;
     transition: 1s;
+}
+
+.context-menu-list {
+    box-shadow: none;
+    border: 1px solid #f3f3f3
+}
+
+.context-menu-list {
+    position: absolute;
+    display: inline-block;
+    min-width: 10em;
+    max-width: 20em;
+    padding: .25em 0;
+    margin: .3em;
+    font-family: inherit;
+    font-size: inherit;
+    list-style-type: none;
+    background: #fff;
+    border: 1px solid #bebebe;
+    border-radius: .2em;
+    -webkit-box-shadow: 0 2px 5px rgba(0, 0, 0, .5);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .5)
+}
+
+.context-menu-item {
+    position: relative;
+    padding: 0.5em 1em;
+    color: #2f2f2f;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: #fff;
+    text-decoration: none;
+}
+
+.context-menu-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.context-menu-item:hover {
+    background-color: black;
+    color: #fff;
+}
+
+.context-menu-link:hover {
+    text-decoration: none;
+    color: white;
+    font-style: bold;
+}
+
+.context-menu-separator {
+    padding: 0;
+    margin: .35em 0;
+    border-bottom: 1px solid #e6e6e6
 }
