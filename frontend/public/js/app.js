@@ -20,7 +20,7 @@ if (upload_file_btn) {
 //***********Authentication**********************/
 
 setTimeout(() => {
-    if (localStorage.authToken != null && window.location.href == 'http://localhost:8000/') {
+    if (localStorage.authToken != null && localStorage.authToken != undefined && window.location.href == 'http://localhost:8000/') {
         window.location.href = "/drive"
     }
 }, 100)

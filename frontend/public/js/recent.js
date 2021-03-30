@@ -17,7 +17,7 @@ async function getRecentFileList() {
             });
             console.log(fileList)
             var htmlValue = document.getElementById("files-list");
-            var content = getContent(fileList);
+            var content = getFileContent(fileList);
             htmlValue.innerHTML = content;
         })
         .catch(err => console.log(err))

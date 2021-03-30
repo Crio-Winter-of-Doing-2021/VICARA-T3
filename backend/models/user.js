@@ -48,7 +48,13 @@ const userSchema = new mongoose.Schema({
 })
 
 userSchema.virtual('files', {
-    ref: 'File',
+    ref: 'file_model',
+    localField: '_id',
+    foreignField: 'owner'
+})
+
+userSchema.virtual('folders', {
+    ref: 'folder_model',
     localField: '_id',
     foreignField: 'owner'
 })

@@ -3,6 +3,7 @@ const fs = require('fs');
 const router = new express.Router();
 const AWS = require('aws-sdk');
 const file_model = require('../models/file')
+const folder_model = require('../models/folder')
 const auth = require('../middleware/auth')
 const path = require('path')
 const request = require('request');
@@ -17,9 +18,10 @@ const s3 = new AWS.S3();
 
 // upload a file
 router.post('/upload', auth, async (req, res, next) => {
-    let file = req.files.uploadFile;
-    console.log(file)
-    const file_content = Buffer.from(file.data, 'base64');
+    let file = req.files.uploadFile
+    let parentId = req.body.parentId
+    let parentName = req.body.parentName
+    const file_content = Buffer.from(file.data, 'base64')
     const params = {
         Bucket: process.env.BUCKET_NAME,
         Key: file.name,
@@ -34,6 +36,8 @@ router.post('/upload', auth, async (req, res, next) => {
         "isTrash": false,
         "file_name": file.name,
         "owner": req.user._id,
+        "parentId": parentId,
+        "parentName": parentName,
     };
 
     //console.log(file_obj);
@@ -49,6 +53,10 @@ router.post('/upload', auth, async (req, res, next) => {
         if (err) res.send("error");
         console.log(data)
     });
+
+    const parent_obj = await folder_model.findOne({ '_id': parentId, 'owner': req.user._id })
+    parent_obj.childFiles.push(model_obj)
+    await parent_obj.save()
 
 });
 
@@ -150,6 +158,13 @@ router.get('/files', auth, async (req, res) => {
 });
 
 // view files
+router.get('/files/:file_id', auth, async (req, res) => {
+    await file_model.find({ "_id": req.params.file_id, "owner": req.user._id, "isTrash": false }, (ERR, file) => {
+        res.send(file);
+    });
+});
+
+// view files
 router.get('/trash', auth, async (req, res) => {
     await file_model.find({ "owner": req.user._id, "isTrash": true }, (ERR, file_list) => {
         res.send(file_list);
@@ -164,8 +179,23 @@ router.get('/files/fav', auth, async (req, res) => {
 });
 
 // rename file
-router.patch('/rename/:file_id', auth, async (req, res) => {
+router.patch('/renamefile/:file_id', auth, async (req, res) => {
     const newName = req.body.newName;
+    var file = await file_model.findOne({ "_id": req.params.file_id, "owner": req.user._id })
+
+    const parentId = file.parentId
+    var parent = await folder_model.findOne({ "_id": parentId, "owner": req.user._id })
+
+    parent.childFiles.forEach((file, index) => {
+        if (file._id == req.params.file_id) {
+            file.file_name = newName
+        }
+    });
+
+    console.log(parent)
+    parent.markModified('childFiles')
+    parent.save()
+
     await file_model.findOneAndUpdate({ "_id": req.params.file_id, "owner": req.user._id }, { "file_name": newName, "updatedAt": Date.now }, (ERR, file) => {
         res.send(file);
     });

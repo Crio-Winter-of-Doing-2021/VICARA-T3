@@ -4,12 +4,12 @@ if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        var email = document.getElementById("login_email");
-        var password = document.getElementById("login_password");
+        var email = document.getElementById("login_email").value;
+        var password = document.getElementById("login_password").value;
 
         const user = {
-            'email': email.value,
-            'password': password.value,
+            'email': email,
+            'password': password,
         };
 
         await fetch('http://localhost:3000/login', {
@@ -21,6 +21,10 @@ if (loginForm) {
             .then((json) => {
                 localStorage.setItem('authToken', json.token)
                 localStorage.setItem('authUser', JSON.stringify(json.user))
+                localStorage.setItem('parentId', email)
+                localStorage.setItem('parentName', email)
+                localStorage.setItem('email', email)
+                viewRootFolder(email)
                 window.location.href = "/drive";
             })
             .catch(err => console.log(err))

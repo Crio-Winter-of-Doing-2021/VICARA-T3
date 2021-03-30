@@ -5,7 +5,11 @@ async function uploadFile() {
     for await (let newFile of file.files) {
         console.log(newFile)
         var allFile = new FormData();
+        var parentId = localStorage.getItem('currentId')
+        var parentName = localStorage.getItem('currentName')
         allFile.append('uploadFile', newFile)
+        allFile.append('parentId', parentId)
+        allFile.append('parentName', parentName)
 
         const myHeaders = new Headers({
             'Authorization': 'Bearer ' + token,

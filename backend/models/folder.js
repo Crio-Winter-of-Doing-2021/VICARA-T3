@@ -1,14 +1,14 @@
 const mongoose = require('mongoose');
 
 // defining a schema
-let file_schema = new mongoose.Schema({
-    key: {
-        type: String,
-        required: true,
+let folder_schema = new mongoose.Schema({
+    isFav: {
+        type: Boolean,
+        default: false,
     },
-    bucket: {
-        type: String,
-        required: true,
+    isTrash: {
+        type: Boolean,
+        default: false,
     },
     parentId: {
         type: String,
@@ -18,16 +18,12 @@ let file_schema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    isFav: {
-        type: Boolean,
-    },
-    isTrash: {
-        type: Boolean,
-    },
-    file_name: {
+    folder_name: {
         type: String,
         required: true,
     },
+    childFiles: [],
+    childFolders: [],
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
@@ -41,12 +37,12 @@ let file_schema = new mongoose.Schema({
     timestamps: true
 });
 
-file_schema.pre('save', function preSave(next) {
-    var file = this;
-    file.updatedAt = Date.now;
+folder_schema.pre('save', function preSave(next) {
+    var folder = this;
+    folder.updatedAt = Date.now;
     next();
 });
 
-let file_model = mongoose.model('file_details', file_schema);
+let folder_model = mongoose.model('folder_details', folder_schema);
 
-module.exports = file_model
+module.exports = folder_model
