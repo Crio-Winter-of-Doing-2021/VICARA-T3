@@ -24,6 +24,8 @@ async function mark_unmark_fav(file_id) {
 }
 
 async function getFavouriteList() {
+    var search = document.getElementById('search')
+    search.onkeyup = getFavouriteList
     var trashLabel = document.getElementById('a4')
     trashLabel.innerHTML = 'Move to Trash'
     const myHeaders = new Headers({

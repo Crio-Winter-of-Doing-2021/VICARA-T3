@@ -1,4 +1,6 @@
 async function getRecentFileList() {
+    var search = document.getElementById('search')
+    search.onkeyup = getRecentFileList
     var trashLabel = document.getElementById('a4')
     trashLabel.innerHTML = 'Move to Trash'
     const myHeaders = new Headers({
@@ -15,7 +17,6 @@ async function getRecentFileList() {
             fileList.sort(function (a, b) {
                 return new Date(b[1].updatedAt) - new Date(a[1].updatedAt)
             });
-            console.log(fileList)
             var htmlValue = document.getElementById("files-list");
             var content = getContent(fileList);
             htmlValue.innerHTML = content;
