@@ -53,6 +53,11 @@
             <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href= "localhost:8000/drive" onclick="getFileList()">Home</a>
+                        </li>
+
                         <li class="nav-item">
                             <a class="nav-link" href="#" onclick="getFavouriteList()">Favourites</a>
                         </li>
@@ -65,21 +70,13 @@
                             <a class="nav-link" href="#" onclick="getTrashFileList()">Trash</a>
                         </li>
 
-                        <li class="nav-item btn-group dropend">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Upload
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-dark text-small shadow"
-                                aria-labelledby="navbarDropdown">
-                                <form hidden enctype="multipart/form-data" onsubmit="uploadFile()">
+                        <li class="nav-item">
+                            <form hidden enctype="multipart/form-data" onsubmit="uploadFile()">
                                     <input name="uploaded_file_list" type="file" id="choose-file" multiple>
                                     <input type="submit" value="upload!" id="submit-btn">
                                 </form>
 
-                                <li><a class="dropdown-item" id="upload-file" href="#">Upload file</a></li>
-                                <li><a class="dropdown-item" href="#">Upload folder</a></li>
-                            </ul>
+                                <a class="dropdown-item" id="upload-file" href="#">Upload file</a>
                         </li>
                     </ul>
                     {{!-- <form class="d-flex">
