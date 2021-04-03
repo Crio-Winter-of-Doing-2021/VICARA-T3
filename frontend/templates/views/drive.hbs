@@ -77,9 +77,8 @@
                                 <input type="submit" value="upload!" id="submit-btn">
                             </form>
 
-                            <a class="dropdown-item" id="upload-file" href="#">Upload file</a>
+                            <a class="nav-link" id="upload-file" href="#">Upload file</a>
                         </li>
-                        {{!-- <li><a class="dropdown-item" href="#">Upload folder</a></li> --}}
                     </ul>
                     {{!-- <form class="d-flex">
                         <input class="form-control me-2" style="width: 400px" type="search"
@@ -127,6 +126,7 @@
         <li class="context-menu-item"><a class="context-menu-link" id="a4" tabindex="-1" href="#">Move to Trash</a>
         </li>
         <li class="context-menu-item"><a class="context-menu-link" id="a5" tabindex="-1" href="#">Delete</a></li>
+        <li class="context-menu-item"><a class="context-menu-link" id="a6" tabindex="-1" href="#">Share</a></li>
     </ul>
 
     <!-- Button trigger modal -->
@@ -159,18 +159,47 @@
     </div>
 
     <!-- Button trigger modal -->
-    <button id="detail-popup" style="display: none;" type="button" class="btn btn-primary" data-bs-toggle="modal"
+    <button id="share-popup" style="display: none;" type="button" class="btn btn-primary" data-bs-toggle="modal"
         data-bs-target="#staticBackdrop1">
         Launch static backdrop modal
     </button>
 
     <!-- Modal -->
     <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="staticBackdrop1Label" aria-hidden="true">
+        aria-labelledby="staticBackdropLabel1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 id="detail-name" class="modal-title" id="staticBackdropLabel1"></h5>
+                    <h5 class="modal-title" id="staticBackdropLabel1">Expires in</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="share-form-popup">
+                    <div class="modal-body">
+                        <label><b>Time</b></label>
+                        <input type="text" id="share" placeholder="Enter time in hours" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-dark" id="submit-share-popup">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Button trigger modal -->
+    <button id="detail-popup" style="display: none;" type="button" class="btn btn-primary" data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop2">
+        Launch static backdrop modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel2" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="detail-name" class="modal-title" id="staticBackdropLabel2"></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -201,6 +230,7 @@
     <script src="js/fav.js"></script>
     <script src="js/trash.js"></script>
     <script src="js/recent.js"></script>
+    <script src="js/share.js"></script>
     <script src="js/deleteFile.js"></script>
     <script src="js/deleteUser.js"></script>
     <script src="js/details.js"></script>

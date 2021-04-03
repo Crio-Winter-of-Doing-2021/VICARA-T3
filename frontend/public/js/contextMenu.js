@@ -28,5 +28,7 @@ function getContextMenu(createTime, updateTime, filename, id) {
         moveToTrash.onclick = () => { mark_unmark_trash(id) }
         var delFile = menu.childNodes[9].childNodes[0]
         delFile.onclick = () => { deleteFile(id) }
+        var shaFile = menu.childNodes[11].childNodes[0]
+        shaFile.onclick = () => { shareFile(id) }
     }
 }

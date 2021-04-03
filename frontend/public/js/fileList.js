@@ -1,7 +1,6 @@
 async function getFileList() {
     var search = document.getElementById('search')
     search.onkeyup = getFileList
-    console.log(search)
     const myHeaders = new Headers({
         'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
     })
