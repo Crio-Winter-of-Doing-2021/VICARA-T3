@@ -1,16 +1,22 @@
-async function shareFile(file_id) {
-    var sharePopup = document.getElementById('share-popup')
+var sharePopup = document.getElementById('share-popup')
+
+function shareFile(file_id) {
     sharePopup.click()
+    shareFilePopup(file_id)
+}
+
+function shareFilePopup(file_id) {
 
     var formPopup = document.getElementById('share-form-popup')
     formPopup.addEventListener('submit', async () => {
         var expireTime = document.getElementById('share').value
         console.log(expireTime)
 
+        var copyBtn = document.getElementById('copy-popup')
+        console.log(copyBtn)
+
         var expire_in = parseFloat(expireTime)
         const myHeaders = new Headers({
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
             'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
         })
 
@@ -20,9 +26,14 @@ async function shareFile(file_id) {
         }).then((response) => {
             return response.text()
         }).then((data) => {
+            sharePopup.click()
+            copyBtn.click()
             copyToClipboard(data)
-            window.location.href = '/drive'
-        })
+        }).then((_) => {
+            setTimeout(() => {
+                window.location.href = '/drive'
+            }, 500)
+        }).catch(err => console.log(err))
     })
 }
 

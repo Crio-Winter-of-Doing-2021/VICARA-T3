@@ -8,4 +8,6 @@ async function deleteFile(file_id) {
         method: 'DELETE',
         headers: myHeaders,
     })
+
+    setTimeOut(() => { getFileList() }, 100)
 }

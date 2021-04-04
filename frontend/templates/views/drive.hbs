@@ -56,7 +56,7 @@
                     <ul class="nav flex-column">
 
                         <li class="nav-item">
-                            <a class="nav-link" href="localhost:8000/drive" onclick="getFileList()">Home</a>
+                            <a class="nav-link" href="/drive" onclick="getFileList()">Home</a>
                         </li>
 
                         <li class="nav-item">
@@ -180,7 +180,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-dark" id="submit-share-popup">Submit</button>
+                        <button type="submit" class="btn btn-dark">Submit</button>
                     </div>
                 </form>
             </div>
@@ -212,6 +212,25 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Button trigger modal -->
+    <button id="copy-popup" style="display: none;" type="button" class="btn btn-primary" data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop3">
+        Launch static backdrop modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel3" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel3">Url copied to clipboard</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
             </div>
         </div>

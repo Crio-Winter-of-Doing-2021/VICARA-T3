@@ -15,8 +15,6 @@ async function mark_unmark_trash(file_id) {
 async function getTrashFileList() {
     var search = document.getElementById('search')
     search.onkeyup = getTrashFileList
-    var trashLabel = document.getElementById('a4')
-    trashLabel.innerHTML = 'Move to Drive'
     const myHeaders = new Headers({
         'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
     })
@@ -30,6 +28,8 @@ async function getTrashFileList() {
             var file_list = JSON.parse(list);
             var htmlValue = document.getElementById("files-list");
             htmlValue.innerHTML = getMyStorageContent(file_list);
+            var trashLabel = document.getElementById('a4')
+            trashLabel.innerHTML = 'Move to Drive'
         })
         .catch(err => console.log(err))
 }

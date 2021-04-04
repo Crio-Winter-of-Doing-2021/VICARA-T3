@@ -122,21 +122,22 @@ router.get('/download/:file_id', auth, async (req, res) => {
 
 // share a file
 router.get('/share/:file_id&:expire_in', auth, async (req, res) => {
-    const file_detail = await file_model.find({ "_id": req.params.file_id, "owner": req.user._id })
-    const params = {
-        Bucket: file_detail[0].bucket,
-        Key: file_detail[0].key
-    };
+    await file_model.find({ "_id": req.params.file_id, "owner": req.user._id }, (err, file_detail) => {
+        const params = {
+            Bucket: file_detail[0].bucket,
+            Key: file_detail[0].key
+        };
 
-    const signedUrlExpireSeconds = req.params.expire_in * 3600 // your expiry time in seconds.
+        const signedUrlExpireSeconds = req.params.expire_in * 3600 // your expiry time in seconds.
 
-    const url = s3.getSignedUrl('getObject', {
-        Bucket: params.Bucket,
-        Key: params.Key,
-        Expires: signedUrlExpireSeconds
+        const url = s3.getSignedUrl('getObject', {
+            Bucket: params.Bucket,
+            Key: params.Key,
+            Expires: signedUrlExpireSeconds
+        })
+
+        res.send(url)
     })
-
-    res.status(200).send(url)
 });
 
 // delete a file
