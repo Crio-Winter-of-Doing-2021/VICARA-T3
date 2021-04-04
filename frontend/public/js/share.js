@@ -6,23 +6,31 @@ function shareFile(file_id) {
 }
 
 function shareFilePopup(file_id) {
+    var expire_in = document.getElementById('share').value
+    const obj = {
+        'file_id': file_id,
+        'expire_in': expire_in
+    }
+
+    console.log(obj)
 
     var formPopup = document.getElementById('share-form-popup')
     formPopup.addEventListener('submit', async () => {
-        var expireTime = document.getElementById('share').value
-        console.log(expireTime)
+
 
         var copyBtn = document.getElementById('copy-popup')
         console.log(copyBtn)
 
-        var expire_in = parseFloat(expireTime)
+
         const myHeaders = new Headers({
+            "Content-type": "application/json; charset=UTF-8",
             'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
         })
 
-        await fetch('http://localhost:3000/share/' + file_id + '&' + expire_in, {
-            method: 'GET',
+        await fetch('http://localhost:3000/share', {
+            method: 'POST',
             headers: myHeaders,
+            body: JSON.stringify(obj),
         }).then((response) => {
             return response.text()
         }).then((data) => {
@@ -31,7 +39,7 @@ function shareFilePopup(file_id) {
             copyToClipboard(data)
         }).then((_) => {
             setTimeout(() => {
-                window.location.href = '/drive'
+                window.location.href = '/drive?'
             }, 500)
         }).catch(err => console.log(err))
     })

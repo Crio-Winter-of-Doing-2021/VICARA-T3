@@ -23,7 +23,7 @@ if (signupForm) {
             .then(json => {
                 localStorage.setItem('authToken', json.token)
                 localStorage.setItem('authUser', JSON.stringify(json.user))
-                window.location.href = "/drive";
+                window.location.href = "/drive?";
             })
             .catch(err => console.log(err))
 

@@ -8,7 +8,7 @@ async function mark_unmark_trash(file_id) {
         method: 'PATCH',
         headers: myHeaders,
     }).then((_) => {
-        window.location.href = "/drive";
+        window.location.href = "/drive?";
     });
 }
 

@@ -21,7 +21,7 @@ async function renameFile(file_id) {
             headers: myHeaders,
             body: JSON.stringify(obj),
         }).then((_) => {
-            window.location.href = "/drive";
+            window.location.href = "/drive?";
         })
     })
 }
