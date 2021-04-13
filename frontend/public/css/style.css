@@ -94,7 +94,7 @@ form.auth_sign-in-form {
     line-height: 1;
     font-weight: 600;
     font-size: 1.1rem;
-    color: #333;
+    color: #3B3C36;
 }
 
 .auth_input-field input::placeholder {
@@ -104,7 +104,7 @@ form.auth_sign-in-form {
 
 .auth_btn {
     width: 150px;
-    background-color: #5995fd;
+    background-color: #3B3C36;
     border: none;
     outline: none;
     height: 49px;
@@ -118,7 +118,7 @@ form.auth_sign-in-form {
 }
 
 .auth_btn:hover {
-    background-color: #4d84e2;
+    background-color: black;
 }
 
 .auth_panels-container {
@@ -139,7 +139,7 @@ form.auth_sign-in-form {
     top: -10%;
     right: 48%;
     transform: translateY(-50%);
-    background-image: linear-gradient(-45deg, #4481eb 0%, #04befe 100%);
+    background-image: linear-gradient(-45deg, #3B3C36 0%, black 100%);
     transition: 1.8s ease-in-out;
     border-radius: 50%;
     z-index: 6;
@@ -149,6 +149,7 @@ form.auth_sign-in-form {
     width: 100%;
     transition: transform 1.1s ease-in-out;
     transition-delay: 0.4s;
+    filter: grayscale(100%);
 }
 
 .auth_panel {

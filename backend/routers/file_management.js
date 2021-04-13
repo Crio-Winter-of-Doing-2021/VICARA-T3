@@ -18,11 +18,12 @@ const s3 = new AWS.S3();
 // upload a file
 router.post('/upload', auth, async (req, res, next) => {
     let file = req.files.uploadFile;
-    const file_content = Buffer.from(file.data, 'binary');
+    console.log(file)
+    const file_content = Buffer.from(file.data, 'base64');
     const params = {
         Bucket: process.env.BUCKET_NAME,
         Key: file.name,
-        Body: file_content
+        Body: file_content,
     };
 
     // insert file details in db
@@ -101,20 +102,45 @@ router.patch('/trash/:file_id', auth, async (req, res) => {
 router.get('/download/:file_id', auth, async (req, res) => {
     await file_model.find({ "_id": req.params.file_id, "owner": req.user._id }, (err, file_detail) => {
         if (err) console.log(err);
-        // console.log(file_detail)
 
         const params = {
             Bucket: file_detail[0].bucket,
             Key: file_detail[0].key
         };
 
-        // file location where the downloaded file will be saved
-        const file_location = params.Key;
-        res.attachment(file_location);
-        const read_stream = s3.getObject(params).createReadStream();
-        //console.log(read_stream)
-        read_stream.pipe(res);
+        s3.getObject(params, function (err, data) {
+            if (err) {
+                throw err
+            }
+            console.log(data.Body)
+            res.send(data.Body)
+            // fs.writeFileSync(params.Key, data.Body)
+            console.log('file downloaded successfully')
+        })
     });
+});
+
+// share a file
+router.post('/share', auth, async (req, res) => {
+    console.log(req.body)
+    await file_model.find({ "_id": req.body.file_id, "owner": req.user._id }, (err, file_detail) => {
+        const params = {
+            Bucket: file_detail[0].bucket,
+            Key: file_detail[0].key
+        };
+
+        var expire = parseFloat(req.body.expire_in)
+
+        const signedUrlExpireSeconds = expire * 3600 // your expiry time in seconds.
+
+        const url = s3.getSignedUrl('getObject', {
+            Bucket: params.Bucket,
+            Key: params.Key,
+            Expires: signedUrlExpireSeconds
+        })
+
+        res.send(url)
+    })
 });
 
 // delete a file
@@ -160,5 +186,12 @@ router.get('/files/fav', auth, async (req, res) => {
     });
 });
 
+// rename file
+router.patch('/rename/:file_id', auth, async (req, res) => {
+    const newName = req.body.newName;
+    await file_model.findOneAndUpdate({ "_id": req.params.file_id, "owner": req.user._id }, { "file_name": newName, "updatedAt": Date.now }, (ERR, file) => {
+        res.send(file);
+    });
+});
 
 module.exports = router

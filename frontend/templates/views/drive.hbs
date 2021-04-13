@@ -7,83 +7,255 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous">
         </script>
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
     <link rel="stylesheet" href="css/drive.css">
+    <link href="css/dashboard.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/5727fb4614.js" crossorigin="anonymous"></script>
-    <title>Enterprise storage</title>
+    <title>My Drive</title>
 </head>
 
-<body style="background-color: rgb(0, 128, 128, 0.2)">
+<body>
+    <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+        <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" id="main-home" href="#" onclick="getFileList()" href="#">My
+            Drive</a>
+        <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <input class="form-control form-control-dark w-100" id="search" type="text" placeholder="Search"
+            aria-label="Search">
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" href="/" onclick="logoutUser()">Sign out</a>
+            </li>
+        </ul>
+
+
+    </header>
     <!-- Add header -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">
-                {{!-- <img src="/docs/5.0/assets/brand/bootstrap-logo.svg" alt="" width="30" height="24"
-                    class="d-inline-block align-top"> --}}
-                Enterprise Storage
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" onclick="getFileList()">My storage</a>
-                    </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="getFavouriteList()">Favourites</a>
-                    </li>
+    <div class="container-fluid">
+        <div class="row">
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="position-sticky pt-3">
+                    <ul class="nav flex-column">
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="getRecentFileList()">Recent</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/drive?" onclick="getFileList()">Home</a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" onclick="getTrashFileList()">Trash</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="getFavouriteList()">Favourites</a>
+                        </li>
 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Upload
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="getRecentFileList()">Recent</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="getTrashFileList()">Trash</a>
+                        </li>
+
+                        <li class="nav-item">
                             <form hidden enctype="multipart/form-data" onsubmit="uploadFile()">
                                 <input name="uploaded_file_list" type="file" id="choose-file" multiple>
                                 <input type="submit" value="upload!" id="submit-btn">
                             </form>
 
-                            <li><a class="dropdown-item" id="upload-file" href="#">Upload file</a></li>
-                            <li><a class="dropdown-item" href="#">Upload folder</a></li>
-                        </ul>
-                    </li>
-                </ul>
-                {{!-- <form class="d-flex">
-                    <input class="form-control me-2" style="width: 400px" type="search"
-                        placeholder="Search files in your storage" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form> --}}
-                <div class="float-right">
-                    <li class="nav-item dropdown navbar-nav me-auto mb-2 mb-lg-0">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            id="authName" aria-expanded="false">
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="/" onclick="logoutUser()">Logout</a></li>
-                            <li><a class="dropdown-item" href="/" onclick="logoutAllUser()">Logout all sessions</a></li>
-                            <li><a class="dropdown-item" href="/" onclick="deleteUser()">Delete account</a></li>
-                        </ul>
-                    </li>
+                            <a class="nav-link" id="upload-file" href="#">Upload file</a>
+                        </li>
+                    </ul>
+                    {{!-- <form class="d-flex">
+                        <input class="form-control me-2" style="width: 400px" type="search"
+                            placeholder="Search files in your storage" aria-label="Search">
+                        <button class="btn btn-outline-success" type="submit">Search</button>
+                    </form> --}}
+                    {{!-- <div class="float-right">
+                        <li class="nav-item dropdown navbar-nav me-auto mb-2 mb-lg-0">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                id="authName" aria-expanded="false">
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="/" onclick="logoutUser()">Logout</a></li>
+                                <li><a class="dropdown-item" href="/" onclick="logoutAllUser()">Logout all
+                                        sessions</a></li>
+                                <li><a class="dropdown-item" href="/" onclick="deleteUser()">Delete account</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </div> --}}
+                </div>
+            </nav>
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Fav</th>
+                            </tr>
+                        </thead>
+                        <tbody id="files-list">
+
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <ul class="context-menu-list" id="contextMenu" role="menu" aria-labelledby="dropdownMenu" style="display:none;">
+        <li class="context-menu-item"><a class="context-menu-link" id="a1" tabindex="-1" href="#">Download</a></li>
+        <li class="context-menu-item"><a class="context-menu-link" id="a2" tabindex="-1" href="#">Rename</a></li>
+        <li class="context-menu-item"><a class="context-menu-link" id="a3" tabindex="-1" href="#">Details</a></li>
+        <li class="context-menu-item"><a class="context-menu-link" id="a4" tabindex="-1" href="#">Move to Trash</a>
+        </li>
+        <li class="context-menu-item"><a class="context-menu-link" id="a5" tabindex="-1" href="#">Delete</a></li>
+        <li class="context-menu-item"><a class="context-menu-link" id="a6" tabindex="-1" href="#">Share</a></li>
+    </ul>
+
+    <!-- Button trigger modal -->
+    <button id="rename-popup" style="display: none;" type="button" class="btn btn-primary" data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop">
+        Launch static backdrop modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Rename file</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="form-popup">
+                    <div class="modal-body">
+                        <label><b>File Name</b></label>
+                        <input type="text" id="rename" placeholder="Enter file name" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-dark" id="submit-popup">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Button trigger modal -->
+    <button id="share-popup" style="display: none;" type="button" class="btn btn-primary" data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop1">
+        Launch static backdrop modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel1">Expires in</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="share-form-popup">
+                    <div class="modal-body">
+                        <label><b>Time</b></label>
+                        <input type="text" id="share" placeholder="Enter time in hours" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-dark">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Button trigger modal -->
+    <button id="detail-popup" style="display: none;" type="button" class="btn btn-primary" data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop2">
+        Launch static backdrop modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel2" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="detail-name" class="modal-title" id="staticBackdropLabel2"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6><span style="color: black">Created At: </span>
+                        <span id="create" class="card-subtitle mb-2 text-muted"></span>
+                    </h6>
+                    <h6><span style="color: black">Updated At: </span>
+                        <span id="update" class="card-subtitle mb-2 text-muted"> </span>
+                    </h6>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
-    </nav>
+    </div>
+
+    <!-- Button trigger modal -->
+    <button id="copy-popup" style="display: none;" type="button" class="btn btn-primary" data-bs-toggle="modal"
+        data-bs-target="#staticBackdrop3">
+        Launch static backdrop modal
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop3" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel3" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel3">Url copied to clipboard</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Display list of files -->
+    <script src="js/fileList.js"></script>
     <script src="js/app.js"></script>
-    <div id="files-list"></div>
+    <script src="js/login.js"></script>
+    <script src="js/signup.js"></script>
+    <script src="js/uploadFile.js"></script>
+    <script src="js/downloadFile.js"></script>
+    <script src="js/content.js"></script>
+    <script src="js/myDrive.js"></script>
+    <script src="js/fav.js"></script>
+    <script src="js/trash.js"></script>
+    <script src="js/recent.js"></script>
+    <script src="js/share.js"></script>
+    <script src="js/deleteFile.js"></script>
+    <script src="js/deleteUser.js"></script>
+    <script src="js/details.js"></script>
+    <script src="js/renameFile.js"></script>
+    <script src="js/logout.js"></script>
+    <script src="js/contextMenu.js"></script>
 </body>
 
 </html>
