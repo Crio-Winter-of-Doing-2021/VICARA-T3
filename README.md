@@ -17,6 +17,7 @@
 - Error handling for all routes.
 - Authentication for users to login.
 - Created and updated time of file.
+- Search files
 
 ### SETUP INSTRUCTIONS
 
