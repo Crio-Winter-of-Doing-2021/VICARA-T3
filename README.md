@@ -86,4 +86,40 @@ The server is made on `nodejs` (v14.15.4)
 
 - The various requests and endpoints are:-
 
+* The various requests and endpoints are:-
+
+  - POST `/signup` - to create user.
+
+  - POST `/login` - to login.
+
+  - POST `/logout` - to logout.
+
+  - POST `/logoutAll` - to logout all sessions.
+
+  - GET `/me` - to get user profile.
+
+  - PATCH `/me` - to update user information.
+
+  - DELETE `/me` - to delete user profile.
+
+  - POST `/upload` - to upload a file.
+
+  - POST `/share` - to share a file.
+
+  - GET `/download/:file_id` - to download a file.
+
+  - GET `/files` - to view all files.
+
+  - GET `/trash` - to view all trash files.
+
+  - GET `/files/fav` - to view all favorite files.
+
+  - PATCH `/rename/:file_id` - to rename a file.
+
+  - PATCH `/trash/:file_id` - to update trash status of a file.
+
+  - PATCH `/fav/:file_id&:fav` - to update favorite status of a file.
+
+  - DELETE `/files/:file_id` - to delete a file.
+
 - Use POSTMAN to fire off the requests to the endpoints.
