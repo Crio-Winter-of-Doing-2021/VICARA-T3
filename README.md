@@ -1,3 +1,8 @@
+<h1 align="center">
+  MyDrive
+</h1>
+<img src="https://github.com/Crio-Winter-of-Doing-2021/VICARA-T3/blob/main/frontend/public/img/home.png">
+
 ## Storage Drive for digital assets which can be adopted by enterprises and integrated with their other systems. Features include:
 
 - Upload file.
