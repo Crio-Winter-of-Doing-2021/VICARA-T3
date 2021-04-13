@@ -86,8 +86,6 @@ The server is made on `nodejs` (v14.15.4)
 
 - The various requests and endpoints are:-
 
-* The various requests and endpoints are:-
-
   - POST `/signup` - to create user.
 
   - POST `/login` - to login.
