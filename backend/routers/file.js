@@ -84,18 +84,29 @@ router.patch('/fav/:file_id&:fav', auth, async (req, res) => {
 router.patch('/trash/:file_id', auth, async (req, res) => {
     var id = req.params.file_id;
 
-    var file = await file_model.findOne({ "_id": id }, (err, doc) => {
+    var file_detail = await file_model.findOne({ "_id": id }, (err, doc) => {
         if (err) console.log(err);
     });
 
-
-    console.log(file.isTrash)
-
     var status = true;
 
-    if (file.isTrash) {
+    if (file_detail.isTrash) {
         status = false;
     }
+
+    const parentId = file_detail.parentId
+    var parent = await folder_model.findOne({ "_id": parentId, "owner": req.user._id })
+
+    parent.childFiles.forEach((file, index) => {
+        if (file._id == req.params.file_id) {
+            file.isTrash = status
+        }
+    });
+
+    console.log(parent)
+    parent.markModified('childFiles')
+    parent.save()
+
 
     file_model.findOneAndUpdate({ "_id": id }, { $set: { isTrash: status } }, (err, doc) => {
         if (err) console.log(err);
@@ -132,6 +143,19 @@ router.get('/download/:file_id', auth, async (req, res) => {
 router.delete('/files/:file_id', auth, async (req, res) => {
     // const file_detail = await file_model.findOne({ "_id": req.params.file_id, "owner": req.user._id });
     const file_detail = await file_model.findOneAndDelete({ "_id": req.params.file_id, "owner": req.user._id });
+
+    const parentId = file_detail.parentId
+    var parent = await folder_model.findOne({ "_id": parentId, "owner": req.user._id })
+
+    parent.childFiles.forEach((file, index) => {
+        if (file._id == req.params.file_id) {
+            parent.childFiles.splice(index, 1)
+        }
+    });
+
+    console.log(parent)
+    parent.markModified('childFiles')
+    parent.save()
 
     console.log(file_detail)
 

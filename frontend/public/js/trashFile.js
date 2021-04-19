@@ -1,4 +1,4 @@
-async function mark_unmark_trash(file_id) {
+async function mark_unmark_trash_file(file_id) {
 
     const myHeaders = new Headers({
         'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
@@ -27,7 +27,7 @@ async function getTrashFileList() {
             var list = JSON.stringify(json)
             var file_list = JSON.parse(list);
             var htmlValue = document.getElementById("files-list");
-            htmlValue.innerHTML = getTrashContent(file_list);
+            htmlValue.innerHTML = getFileContent(file_list);
         })
         .catch(err => console.log(err))
 }

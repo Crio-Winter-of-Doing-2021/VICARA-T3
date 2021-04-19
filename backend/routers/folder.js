@@ -75,6 +75,24 @@ router.patch('/renamefolder/:folder_id', auth, async (req, res) => {
 });
 
 
+// delete a folder
+router.delete('/folders/:folder_id', auth, async (req, res) => {
+    const folder_detail = await folder_model.findOneAndDelete({ "_id": req.params.folder_id, "owner": req.user._id });
+
+    const parentId = folder_detail.parentId
+    var parent = await folder_model.findOne({ "_id": parentId, "owner": req.user._id })
+
+    parent.childFolders.forEach((folder, index) => {
+        if (folder._id == req.params.folder_id) {
+            delete parent.childFolders.splice(index, 1)
+        }
+    });
+
+    console.log(parent)
+    parent.markModified('childFolders')
+    parent.save()
+
+});
 
 
 module.exports = router

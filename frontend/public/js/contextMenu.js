@@ -28,7 +28,7 @@ function getFileContextMenu(createTime, updateTime, filename, id) {
         var details = menu.childNodes[5].childNodes[0];
         details.onclick = () => { detailPopup(createTime, updateTime, filename) }
         var moveToTrash = menu.childNodes[7].childNodes[0]
-        moveToTrash.onclick = () => { mark_unmark_trash(id) }
+        moveToTrash.onclick = () => { mark_unmark_trash_file(id) }
         var delFile = menu.childNodes[9].childNodes[0]
         delFile.onclick = () => { deleteFile(id) }
     }
@@ -53,7 +53,7 @@ function getFolderContextMenu(createTime, updateTime, foldername, id) {
         details.onclick = () => { detailPopup(createTime, updateTime, foldername) }
         // var moveToTrash = menu.childNodes[7].childNodes[0]
         // moveToTrash.onclick = () => { mark_unmark_trash(id) }
-        // var delFile = menu.childNodes[9].childNodes[0]
-        // delFile.onclick = () => { deleteFile(id) }
+        var delFile = menu.childNodes[9].childNodes[0]
+        delFile.onclick = () => { deleteFolder(id) }
     }
 }
